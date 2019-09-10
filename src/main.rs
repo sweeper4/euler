@@ -114,7 +114,7 @@ fn max_palindrome_multiple_between(min:usize,max:usize) -> usize{
     let mut palindromes = Vec::new();
     for x in min..max+1 {
         for y in min..max+1 {
-            if is_Palindrome(x*y) {
+            if is_palindrome(x*y) {
                 palindromes.push(x*y);
             }
         }
@@ -123,7 +123,7 @@ fn max_palindrome_multiple_between(min:usize,max:usize) -> usize{
 
 }
 
-fn is_Palindrome( number: usize) -> bool {
+fn is_palindrome( number: usize) -> bool {
     number == reverse(number)    
 }
 
@@ -164,5 +164,11 @@ impl DigitIter {
 }
 
 fn smallest_multiple(max:usize) -> usize {
-    get_primes_less_than(max).iter().product()
+    let min_prime : usize = get_primes_less_than(max).iter().product();
+    let mut i = 1;
+    while (2_usize..max).map(|x| (i * min_prime) % x == 0 )
+        .filter(|x| *x ).collect::<Vec<bool>>().len() != max-2 {
+        i = i + 1;
+    }
+    i * min_prime
 }
