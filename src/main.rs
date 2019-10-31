@@ -7,4 +7,5 @@ fn main() {
     println!("Max palindrome {}",problems::problem4(100,999));
     println!("The smallest multiple of numbers less than {} is {}",10,problems::problem5(10));
     println!("The smallest multiple of numbers less than {} is {}",20,problems::problem5(20));
+    println!("The difference between the sum of the squares and the square of the sum from 1 to 100 is {}",problems::problem6(100));
 }

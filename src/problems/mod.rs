@@ -27,3 +27,9 @@ mod problem5;
 pub fn problem5(max:usize) -> usize {
     return problem5::smallest_multiple(max)
 }
+
+mod problem6;
+
+pub fn problem6(n: u32) -> u32 {
+    return problem6::compute_difference_between_square_of_sums_and_sum_of_squares(n)
+}

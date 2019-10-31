@@ -6,6 +6,6 @@ pub fn multiples_of_3_5(max : u32) -> u32 {
     return sum_threes + sum_fives - sum_fifteens
 }
 
-fn sum_to(max: u32) -> u32 {
+pub fn sum_to(max: u32) -> u32 {
     (max * (max + 1)) / 2
 }
