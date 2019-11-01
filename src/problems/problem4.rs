@@ -1,4 +1,4 @@
-pub fn max_palindrome_multiple_between(min:usize, max:usize) -> usize {
+fn max_palindrome_multiple_between(min:usize, max:usize) -> usize {
     let mut palindromes = Vec::new();
     for x in min..max+1 {
         for y in min..max+1 {
@@ -48,4 +48,8 @@ impl DigitIter {
     fn new(num: usize) -> DigitIter {
         return DigitIter{number: num, base:10}
     }
+}
+
+pub fn problem4() {
+    println!("Max palindrome {}",max_palindrome_multiple_between(100,999));
 }

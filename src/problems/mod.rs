@@ -1,35 +1,35 @@
 mod problem1;
 
-pub fn problem1(n: u32) -> u32 {
-    return problem1::multiples_of_3_5(n)
+pub fn problem1() {
+    problem1::problem1();
 }
 
 mod problem2;
 
-pub fn problem2(n: usize) -> usize {
-    return problem2::sum_evens_less_than(n)
+pub fn problem2() {
+    problem2::problem2();
 }
 
 mod problem3;
 
-pub fn problem3(n: usize) -> usize {
-    return problem3::get_max_factor(n)
+pub fn problem3() {
+    problem3::problem3();
 }
 
 mod problem4;
 
-pub fn problem4(min:usize, max:usize) -> usize {
-    return problem4::max_palindrome_multiple_between(min, max)
+pub fn problem4() {
+    problem4::problem4();
 }
 
 mod problem5;
 
-pub fn problem5(max:usize) -> usize {
-    return problem5::smallest_multiple(max)
+pub fn problem5() {
+    problem5::problem5();
 }
 
 mod problem6;
 
-pub fn problem6(n: u32) -> u32 {
-    return problem6::compute_difference_between_square_of_sums_and_sum_of_squares(n)
+pub fn problem6() {
+    problem6::problem6()
 }

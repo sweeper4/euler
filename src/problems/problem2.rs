@@ -1,4 +1,4 @@
-pub fn sum_evens_less_than( max: usize) -> usize {
+fn sum_evens_less_than( max: usize) -> usize {
     let mut fb_generator = Fb::new();
     let mut i = 0;
     let mut total = 0;
@@ -39,4 +39,7 @@ impl Fb {
             cache: Vec::new()
         }
     }
+}
+pub fn problem2() {
+    println!("total of even fibonacci numbers = {}", sum_evens_less_than(4000000));
 }

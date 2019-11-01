@@ -1,11 +1,32 @@
 mod problems;
 
+use std::env;
+
 fn main() {
-    println!("sum of the threes and fives is {} lower than {}",problems::problem1(1000),1000);
-    println!("total of even fibonacci numbers = {}", problems::problem2(4000000));
-    println!("The max prime factor of {} is {}",600851475143_u64,problems::problem3(600851475143));
-    println!("Max palindrome {}",problems::problem4(100,999));
-    println!("The smallest multiple of numbers less than {} is {}",10,problems::problem5(10));
-    println!("The smallest multiple of numbers less than {} is {}",20,problems::problem5(20));
-    println!("The difference between the sum of the squares and the square of the sum from 1 to 100 is {}",problems::problem6(100));
+
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() > 2 {
+        println!("Usage: {} [problem #]", args[0]);
+        return;
+    }
+
+    if args.len() == 1 {
+        problems::problem1();
+        problems::problem2();
+        problems::problem3();
+        problems::problem4();
+        problems::problem5();
+        problems::problem6();
+    } else {
+        match args[1].parse::<u32>().unwrap() {
+            1 => problems::problem1(),
+            2 => problems::problem2(),
+            3 => problems::problem3(),
+            4 => problems::problem4(),
+            5 => problems::problem5(),
+            6 => problems::problem6(),
+            _ => println!("Usage: {} [problem #]", args[0])
+        }
+    }
 }

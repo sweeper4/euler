@@ -1,4 +1,4 @@
-pub fn get_primes_less_than(max: usize) -> Vec<usize> {
+fn get_primes_less_than(max: usize) -> Vec<usize> {
     let mut ints : Vec<usize> = (2..max).collect();
     let mut primes : Vec<usize> = Vec::new();
     let upper_bound = get_sqrt_aprox(max);
@@ -28,10 +28,10 @@ fn get_sqrt_aprox(base: usize) -> usize {
     return old_guess
 }
 
-pub fn get_max_factor(number: usize) -> usize {
+fn get_max_factor(number: usize) -> usize {
     match get_prime_factors(number).last(){
-        Some(prime) => *prime,
-        None => 0
+        Some(prime) => return *prime,
+        None => return 0
     }                              
 }
 
@@ -44,5 +44,9 @@ fn get_prime_factors(number: usize) -> Vec<usize> {
             factors.push(prime);
         }
     }
-    factors
+    return factors
+}
+
+pub fn problem3() {
+    println!("The max prime factor of {} is {}",600851475143_u64,get_max_factor(600851475143));
 }
