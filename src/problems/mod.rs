@@ -45,3 +45,9 @@ mod problem8;
 pub fn problem8() {
     problem8::problem8();
 }
+
+mod problem9;
+
+pub fn problem9() {
+    problem9::problem9();
+}
