@@ -26,6 +26,7 @@ fn main() {
         problems::problem12();
         problems::problem13();
         problems::problem14();
+        problems::problem17();
     } else {
         match args[1].parse::<u32>().unwrap() {
             1 => problems::problem1(),
@@ -42,6 +43,7 @@ fn main() {
             12 => problems::problem12(),
             13 => problems::problem13(),
             14 => problems::problem14(),
+            17 => problems::problem17(),
             _ => println!("Usage: {} [problem #]", args[0])
         }
     }
