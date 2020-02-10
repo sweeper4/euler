@@ -38,7 +38,6 @@ fn count_characters_in_all_numbers_less_than(n:u32) -> u32 {
     let mut sum = 0;
     while i <= n {
         let count = count_characters_in_n(i, &number_to_char_count);
-        println!("{} characters in {}", count, i);
         sum += count;
         i += 1;
     }

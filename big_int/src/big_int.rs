@@ -1,0 +1,302 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
+use std::convert::TryInto;
+use std::cmp::Ordering;
+
+
+#[derive(Debug)]
+pub struct BigInt {
+    pub signed: bool,
+    pub num_vec: Vec<u32>
+}
+
+impl PartialOrd for BigInt {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if self.is_zero() && other.is_zero() {
+            return Some(Ordering::Equal)
+        }
+        if self.signed && !other.signed {
+            return Some(Ordering::Less);
+        } else if !self.signed && other.signed {
+            return Some(Ordering::Greater);
+        } else if !self.signed {
+            return self.num_vec.partial_cmp(&other.num_vec);
+        } else {
+            match self.num_vec.partial_cmp(&other.num_vec) {
+                Some(Ordering::Greater) => Some(Ordering::Less),
+                Some(Ordering::Less) => Some(Ordering::Greater),
+                a => a
+            }
+        }
+    }
+}
+
+impl PartialEq for BigInt {
+    fn eq(&self, other: &Self) -> bool {
+        (self.signed == other.signed && self.num_vec == other.num_vec) || (self.is_zero() && other.is_zero())
+    }
+}
+
+impl BigInt {
+    pub fn from_string(n: String) -> BigInt {
+        if n.len() == 0 {
+            return BigInt{
+                signed: false,
+                num_vec: vec![0]
+            }
+        }
+        let mut vec: Vec<u32> = vec![];
+        let signed = n.chars().nth(0).unwrap() == '-';
+
+        let mut n_iter = n.chars().rev();
+        let mut n_char = n_iter.next();
+
+        let mut mul = 1;
+        let mut sum = 0;
+
+        while n_char.is_some() {
+            if n_char.unwrap().is_digit(10) {
+                sum += mul * n_char.unwrap().to_digit(10).unwrap();
+                if mul == 100 {
+                    mul = 1;
+                    vec.insert(0, sum);
+                    sum = 0;
+                } else {
+                    mul *= 10;
+                }
+            }
+
+            n_char = n_iter.next();
+        }
+
+        if mul != 1 && sum > 0 {
+            vec.insert(0, sum);
+        }
+
+        BigInt{
+            signed: signed,
+            num_vec: vec
+        }
+    }
+
+    pub fn new(mut n: i32) -> BigInt {
+        let mut vec: Vec<u32> = vec![];
+        let signed = n < 0;
+        if n < 0 {
+            n *= -1;
+        }
+        match n {
+            0 => BigInt{signed: signed, num_vec: vec![0]},
+            mut i => {
+                while i > 0 {
+                    vec.insert(0,(i % 1000).try_into().unwrap());
+                    i /= 1000;
+                }
+                BigInt{
+                    signed: signed,
+                    num_vec: vec
+                }
+            }
+        }
+    }
+
+    pub fn show(&self) -> String {
+        let mut show = "".to_string();
+        if self.signed {
+            show += "-";
+        }
+        for (i, val) in self.num_vec.iter().enumerate() {
+            let mut string = val.to_string();
+            if i > 0 {
+                while string.len() < 3 {
+                    string = "0".to_owned() + &string;
+                }
+            }
+            show += &string;
+        }
+        return show;
+    }
+    
+    pub fn show_formatted(&self) -> String {
+        let mut show = "".to_string();
+        show += "BigInt { ";
+        if self.signed {
+            show += "-";
+        }
+        for (i, val) in self.num_vec.iter().enumerate() {
+            let mut string = val.to_string();
+            if i > 0 {
+                show += ",";
+                while string.len() < 3 {
+                    string = "0".to_owned() + &string;
+                }
+            }
+            show += &string;
+        }
+        show += " }";
+        return show;
+    }
+
+    pub fn add(self, other: BigInt) -> BigInt {
+        if self.signed != other.signed {
+            if self.signed {
+                return BigInt{
+                    signed: other.signed,
+                    num_vec: other.num_vec
+                }.sub(BigInt{
+                    signed: !self.signed,
+                    num_vec: self.num_vec
+                });
+            } else {
+                return BigInt{
+                    signed: self.signed,
+                    num_vec: self.num_vec
+                }.sub(BigInt{
+                    signed: !other.signed,
+                    num_vec: other.num_vec
+                });
+            }
+        }
+        let mut carry = 0;
+        let mut new_vec = vec![];
+        let mut a = self.num_vec.iter().rev();
+        let mut b = other.num_vec.iter().rev();
+        let mut a_val = a.next();
+        let mut b_val = b.next();
+        while a_val.is_some() && b_val.is_some() {
+            let sum = a_val.unwrap() + b_val.unwrap() + carry;
+            new_vec.insert(0, sum % 1000);
+            carry = sum / 1000;
+            a_val = a.next();
+            b_val = b.next();
+        }
+        while a_val.is_some() {
+            let sum = a_val.unwrap() + carry;
+            new_vec.insert(0, sum % 1000);
+            carry = sum / 1000;
+            a_val = a.next();
+        }
+        while b_val.is_some() {
+            let sum = b_val.unwrap() + carry;
+            new_vec.insert(0, sum % 1000);
+            carry = sum / 1000;
+            b_val = b.next();
+        }
+        while carry > 0 {
+            new_vec.insert(0, carry % 1000);
+            carry /= 1000;
+        }
+        return BigInt{
+            signed: self.signed,
+            num_vec: BigInt::remove_leading_zeros(new_vec)
+        }
+    }
+
+    pub fn sub(self, other: BigInt) -> BigInt {
+        if self.signed != other.signed {
+            return BigInt{
+                signed: self.signed,
+                num_vec: BigInt{
+                    signed: false,
+                    num_vec: self.num_vec
+                }.add(
+                    BigInt{
+                        signed: false,
+                        num_vec: other.num_vec
+                    }
+                ).num_vec
+            };
+        }
+        if self.num_vec == other.num_vec {
+            return BigInt{
+                signed: false,
+                num_vec: vec![0]
+            }
+        }
+        let mut a;
+        let mut b;
+        let signed;
+        let mut carry = 0;
+        let mut new_vec = vec![];
+        if self.num_vec < other.num_vec {
+            a = other.num_vec.iter().rev();
+            b = self.num_vec.iter().rev();
+            signed = !self.signed;
+        } else {
+            a = self.num_vec.iter().rev();
+            b = other.num_vec.iter().rev();
+            signed = self.signed;
+        }
+        let mut a_val = a.next();
+        let mut b_val = b.next();
+        while a_val.is_some() || b_val.is_some() {
+            let sum;
+            if a_val.unwrap() < b_val.unwrap() {
+                sum = 1000 + a_val.unwrap() - b_val.unwrap() - carry;
+                carry = 1;
+            } else {
+                sum = a_val.unwrap() - b_val.unwrap() - carry;
+                carry = 0;
+            }
+            new_vec.insert(0, sum % 1000);
+            a_val = a.next();
+            b_val = b.next();
+        }
+
+        return BigInt{
+            signed: signed,
+            num_vec: BigInt::remove_leading_zeros(new_vec)
+        }
+    }
+
+    pub fn mul(self, other: BigInt) -> BigInt {
+        let signed = self.signed != other.signed;
+        let mut new_vec = vec![];
+        let mut a = self.num_vec.iter().rev();
+        let mut a_val = a.next();
+        let mut a_index = 0;
+        while a_val.is_some() {
+            let mut b = other.num_vec.iter().rev();
+            let mut b_val = b.next();
+            let mut b_index = 0;
+            let mut carry = 0;
+            while b_val.is_some() {
+                let mut product = a_val.unwrap() * b_val.unwrap() + carry;
+                if new_vec.len() == a_index + b_index {
+                    new_vec.insert(0, product % 1000);
+                    carry = product / 1000;
+                } else {
+                    let update_index = new_vec.len() - 1 - a_index - b_index;
+                    product += new_vec[update_index];
+                    new_vec[update_index] = product % 1000;
+                    carry = product / 1000;
+                }
+                b_val = b.next();
+                b_index += 1;
+            }
+            while carry > 0 {
+                new_vec.insert(0, carry % 1000);
+                carry /= 1000;
+            }
+            a_val = a.next();
+            a_index += 1;
+        }
+        return BigInt{
+            signed: signed,
+            num_vec: BigInt::remove_leading_zeros(new_vec)
+        };
+    }
+
+    pub fn is_zero(&self) -> bool {
+        self.num_vec.len() == 1 && self.num_vec[0] == 0
+    }
+
+    fn remove_leading_zeros(num_vec: Vec<u32>) -> Vec<u32> {
+        let mut new_vec = num_vec;
+        while new_vec.len() > 1 && new_vec[0] == 0 {
+            new_vec.remove(0);
+        }
+        return new_vec;
+    }
+}

@@ -1,2 +1,5 @@
 /target
 **/*.rs.bk
+**/*.lock
+*.lock
+/big_int/target
