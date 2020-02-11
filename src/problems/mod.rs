@@ -93,3 +93,9 @@ mod problem20;
 pub fn problem20() {
     problem20::problem20();
 }
+
+mod problem23;
+
+pub fn problem23() {
+    problem23::problem23();
+}
