@@ -16,6 +16,7 @@ mod problems {
     pub mod problem17;
     pub mod problem20;
     pub mod problem23;
+    pub mod problem26;
 }
 
 use std::env;
@@ -47,6 +48,7 @@ fn main() {
         problems::problem17::problem17();
         problems::problem20::problem20();
         problems::problem23::problem23();
+        problems::problem26::problem26();
     } else {
         match args[1].parse::<u32>().unwrap() {
             1 => problems::problem1::problem1(),
@@ -66,6 +68,7 @@ fn main() {
             17 => problems::problem17::problem17(),
             20 => problems::problem20::problem20(),
             23 => problems::problem23::problem23(),
+            26 => problems::problem26::problem26(),
             _ => println!("Usage: {} [problem #]", args[0])
         }
     }
