@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
 
@@ -83,4 +84,41 @@ pub fn transform_fraction_into_decimal_notation(mut num: i32, denum: i32) -> Dec
             repeating_decimal_part: repeating_decimal_part
         }
     }
+}
+
+pub fn prime_factors_of(mut n:u64) -> HashMap<u64,u64> {
+    let mut primes = primes::PrimeSet::new();
+    let mut prime_factors = HashMap::new();
+    for prime in primes.iter() {
+        let mut count = 0;
+        while n > 1 && n % prime == 0 {
+            count += 1;
+            n /= prime;
+        }
+        if count > 0 {
+            prime_factors.insert(prime, count);
+        }
+        if n == 1 {
+            break;
+        }
+    }
+    return prime_factors;
+}
+
+pub fn permute<T: Clone + Copy + Eq + std::hash::Hash>(list:Vec<T>) -> HashSet<Vec<T>> {
+    let mut final_result = HashSet::new();
+    if list.is_empty() {
+        final_result.insert(vec![]);
+        return final_result;
+    }
+    let first = list[0];
+    let recursive_result:HashSet<Vec<T>> = permute::<T>(list[1..list.len()].to_vec());
+    for result in recursive_result {
+        for i in 0..result.len()+1 {
+            let mut mut_result:Vec<T> = result.clone();
+            mut_result.insert(i,first);
+            final_result.insert(mut_result);
+        }
+    }
+    return final_result;
 }

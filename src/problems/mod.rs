@@ -106,10 +106,22 @@ pub fn problem26() {
     problem26::problem26();
 }
 
-mod problem26;
+mod problem29;
+
+pub fn problem29() {
+    problem29::problem29();
+}
+
+mod problem34;
 
 pub fn problem34() {
     problem34::problem34();
+}
+
+mod problem35;
+
+pub fn problem35() {
+    problem35::problem35();
 }
 
 mod problem40;
@@ -122,4 +134,10 @@ mod problem52;
 
 pub fn problem52() {
     problem52::problem52();
+}
+
+mod problem701;
+
+pub fn problem701() {
+    problem701::problem701();
 }
