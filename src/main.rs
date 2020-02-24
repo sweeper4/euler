@@ -21,6 +21,7 @@ mod problems {
     pub mod problem32;
     pub mod problem34;
     pub mod problem35;
+    pub mod problem38;
     pub mod problem40;
     pub mod problem52;
     pub mod problem701;
@@ -60,6 +61,7 @@ fn main() {
         problems::problem32::problem32();
         problems::problem34::problem34();
         problems::problem35::problem35();
+        problems::problem38::problem38();
         problems::problem40::problem40();
         problems::problem52::problem52();
         problems::problem701::problem701();
@@ -87,6 +89,7 @@ fn main() {
             32 => problems::problem32::problem32(),
             34 => problems::problem34::problem34(),
             35 => problems::problem35::problem35(),
+            38 => problems::problem38::problem38(),
             40 => problems::problem40::problem40(),
             52 => problems::problem52::problem52(),
             701 => problems::problem701::problem701(),
