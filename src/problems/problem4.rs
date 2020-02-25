@@ -18,13 +18,12 @@ fn reverse(number:usize) -> usize{
     let digits = DigitIter::new(number);
     let mut value = 0;
     let mut counter = 0;
-    for digit in digits{
+    for digit in digits {
         value = (value * 10) + digit;
         counter = counter + 1;
     }
     return value;
 }
-
 
 struct DigitIter{
     number: usize,

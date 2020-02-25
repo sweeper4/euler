@@ -69,3 +69,81 @@ mod problem12;
 pub fn problem12() {
     problem12::problem12();
 }
+
+mod problem13;
+
+pub fn problem13() {
+    problem13::problem13();
+}
+
+mod problem14;
+
+pub fn problem14() {
+    problem14::problem14();
+}
+
+mod problem17;
+
+pub fn problem17() {
+    problem17::problem17();
+}
+
+mod problem20;
+
+pub fn problem20() {
+    problem20::problem20();
+}
+
+mod problem23;
+
+pub fn problem23() {
+    problem23::problem23();
+}
+
+mod problem26;
+
+pub fn problem26() {
+    problem26::problem26();
+}
+
+mod problem29;
+
+pub fn problem29() {
+    problem29::problem29();
+}
+
+mod problem34;
+
+pub fn problem34() {
+    problem34::problem34();
+}
+
+mod problem35;
+
+pub fn problem35() {
+    problem35::problem35();
+}
+
+mod problem38;
+
+pub fn problem38() {
+    problem38::problem38();
+}
+
+mod problem40;
+
+pub fn problem40() {
+    problem40::problem40();
+}
+
+mod problem52;
+
+pub fn problem52() {
+    problem52::problem52();
+}
+
+mod problem701;
+
+pub fn problem701() {
+    problem701::problem701();
+}

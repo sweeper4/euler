@@ -1,2 +1,6 @@
 /target
 **/*.rs.bk
+**/*.lock
+*.lock
+/**/target
+**.lock
