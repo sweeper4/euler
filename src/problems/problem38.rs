@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use std::convert::TryInto;
 
 pub fn problem38() {
@@ -16,7 +15,7 @@ fn find_largest_pandigital() -> u64 {
             i += 1;
         }
         
-        if product <= 987654321 && is_pandigital(product) && product > max_product {
+        if product <= 987654321 && number_theory::number_theory::is_pandigital(product, 9) && product > max_product {
             max_product = product;
         }
 
@@ -28,13 +27,4 @@ fn find_largest_pandigital() -> u64 {
     }
 
     return max_product;
-}
-
-fn is_pandigital(mut n:u64) -> bool {
-    let mut digits = HashSet::new();
-    while n > 0 {
-        digits.insert(n % 10);
-        n /= 10;
-    }
-    return digits.len() == 9 && !digits.contains(&0);
 }

@@ -23,6 +23,8 @@ mod problems {
     pub mod problem35;
     pub mod problem38;
     pub mod problem40;
+    pub mod problem41;
+    pub mod problem44;
     pub mod problem52;
     pub mod problem701;
 }

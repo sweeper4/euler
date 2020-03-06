@@ -122,3 +122,20 @@ pub fn permute<T: Clone + Copy + Eq + std::hash::Hash>(list:Vec<T>) -> HashSet<V
     }
     return final_result;
 }
+
+pub fn is_pandigital(mut n:u64, m:u64) -> bool {
+    let mut digits = HashSet::new();
+    while n > 0 {
+        digits.insert(n % 10);
+        n /= 10;
+    }
+    if digits.len() != m.try_into().unwrap() {
+        return false;
+    }
+    for i in 1..(m+1) {
+        if !digits.contains(&i) {
+            return false;
+        }
+    }
+    return true;
+}
