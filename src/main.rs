@@ -13,7 +13,11 @@ mod problems {
     pub mod problem12;
     pub mod problem13;
     pub mod problem14;
+    pub mod problem15;
+    pub mod problem16;
     pub mod problem17;
+    pub mod problem18;
+    pub mod problem19;
     pub mod problem20;
     pub mod problem23;
     pub mod problem26;
@@ -60,7 +64,11 @@ fn main() {
         (12, Box::new(problems::problem12::problem12 as fn() -> ())),
         (13, Box::new(problems::problem13::problem13 as fn() -> ())),
         (14, Box::new(problems::problem14::problem14 as fn() -> ())),
+        (15, Box::new(problems::problem15::problem15 as fn() -> ())),
+        (16, Box::new(problems::problem16::problem16 as fn() -> ())),
         (17, Box::new(problems::problem17::problem17 as fn() -> ())),
+        (18, Box::new(problems::problem18::problem18 as fn() -> ())),
+        (19, Box::new(problems::problem19::problem19 as fn() -> ())),
         (20, Box::new(problems::problem20::problem20 as fn() -> ())),
         (23, Box::new(problems::problem23::problem23 as fn() -> ())),
         (26, Box::new(problems::problem26::problem26 as fn() -> ())),
@@ -89,7 +97,7 @@ fn main() {
         let problem_num = args[1].parse::<u32>().unwrap();
         match problems.get(&problem_num) {
             Some(func) => func(),
-            None => println!("Usage: {} [problem #]", args[0]),
+            None => println!("Usage: {} [problem #]", args[0])
         }
     }
 }

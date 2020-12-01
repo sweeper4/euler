@@ -139,3 +139,8 @@ pub fn is_pandigital(mut n:u64, m:u64) -> bool {
     }
     return true;
 }
+
+pub fn a_choose_b(a:u128, b:u128) -> u128 {
+    //This could be made better by dividing when possible, to reduce overflows
+    return ((b+1)..(a+1)).fold(1, |a,b| a * b)/(1..b+1).fold(1, |a,b| a * b);
+}
