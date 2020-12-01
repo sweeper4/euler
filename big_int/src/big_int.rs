@@ -3,9 +3,10 @@
 
 use std::convert::TryInto;
 use std::cmp::Ordering;
+use std::ops::Rem;
+use std::ops::Mul;
 
-
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BigInt {
     pub signed: bool,
     pub num_vec: Vec<u32>
@@ -35,6 +36,26 @@ impl PartialOrd for BigInt {
 impl PartialEq for BigInt {
     fn eq(&self, other: &Self) -> bool {
         (self.signed == other.signed && self.num_vec == other.num_vec) || (self.is_zero() && other.is_zero())
+    }
+}
+
+impl Mul for BigInt {
+    type Output = Self;
+
+    fn mul(self, other: BigInt) -> Self::Output {
+        return self.mul(other);
+    }
+}
+
+impl Rem for BigInt {
+    type Output = Self;
+
+    fn rem(self, modulus: Self) -> Self::Output {
+        // let mut temp = self;
+        // while temp < modulus {
+        //     temp 
+        // }
+        return self;
     }
 }
 
@@ -158,10 +179,97 @@ impl BigInt {
                 });
             }
         }
+        
+        return BigInt{
+            signed: self.signed,
+            num_vec: BigInt::remove_leading_zeros(BigInt::add_array(self.num_vec, other.num_vec))
+        }
+    }
+
+    pub fn sub(self, other: BigInt) -> BigInt {
+        if self.signed != other.signed {
+            return BigInt{
+                signed: self.signed,
+                num_vec: BigInt{
+                    signed: false,
+                    num_vec: self.num_vec
+                }.add(
+                    BigInt{
+                        signed: false,
+                        num_vec: other.num_vec
+                    }
+                ).num_vec
+            };
+        }
+        if self.num_vec == other.num_vec {
+            return BigInt{
+                signed: false,
+                num_vec: vec![0]
+            }
+        }
+
+        let signed: bool;
+        if self.num_vec < other.num_vec {
+            signed = !self.signed;
+        } else {
+            signed = self.signed;
+        }
+
+        return BigInt{
+            signed: signed,
+            num_vec: BigInt::remove_leading_zeros(BigInt::sub_array(self.num_vec, other.num_vec))
+        }
+    }
+
+    pub fn mul(self, other: BigInt) -> BigInt {
+        let signed = self.signed != other.signed;
+        
+        return BigInt{
+            signed: signed,
+            num_vec: BigInt::remove_leading_zeros(BigInt::mul_array(self.num_vec, other.num_vec))
+        };
+    }
+
+    pub fn div(self, other: BigInt) -> BigInt {
+        return self;
+    }
+
+    /**
+        Does not support negative exponents currently
+    */
+    pub fn pow(self, pow: u32) -> BigInt {
+        let mut product = BigInt::new(1);
+        let mut temp = self;
+        let mut digit = 2;
+        loop {
+            if pow % digit != 0 {
+                product = product * temp.clone();
+            }
+            temp = temp.clone() * temp.clone();
+            if digit > pow {
+                return product;
+            }
+            digit *= 2;
+        }
+    }
+
+    pub fn is_zero(&self) -> bool {
+        self.num_vec.len() == 1 && self.num_vec[0] == 0
+    }
+
+    fn remove_leading_zeros(num_vec: Vec<u32>) -> Vec<u32> {
+        let mut new_vec = num_vec;
+        while new_vec.len() > 1 && new_vec[0] == 0 {
+            new_vec.remove(0);
+        }
+        return new_vec;
+    }
+
+    fn add_array(num1:Vec<u32>, num2:Vec<u32>) -> Vec<u32> {
         let mut carry = 0;
         let mut new_vec = vec![];
-        let mut a = self.num_vec.iter().rev();
-        let mut b = other.num_vec.iter().rev();
+        let mut a = num1.iter().rev();
+        let mut b = num2.iter().rev();
         let mut a_val = a.next();
         let mut b_val = b.next();
         while a_val.is_some() && b_val.is_some() {
@@ -187,46 +295,20 @@ impl BigInt {
             new_vec.insert(0, carry % 1000);
             carry /= 1000;
         }
-        return BigInt{
-            signed: self.signed,
-            num_vec: BigInt::remove_leading_zeros(new_vec)
-        }
+        return new_vec;
     }
 
-    pub fn sub(self, other: BigInt) -> BigInt {
-        if self.signed != other.signed {
-            return BigInt{
-                signed: self.signed,
-                num_vec: BigInt{
-                    signed: false,
-                    num_vec: self.num_vec
-                }.add(
-                    BigInt{
-                        signed: false,
-                        num_vec: other.num_vec
-                    }
-                ).num_vec
-            };
-        }
-        if self.num_vec == other.num_vec {
-            return BigInt{
-                signed: false,
-                num_vec: vec![0]
-            }
-        }
+    fn sub_array(num1:Vec<u32>, num2:Vec<u32>) -> Vec<u32> {
         let mut a;
         let mut b;
-        let signed;
         let mut carry = 0;
         let mut new_vec = vec![];
-        if self.num_vec < other.num_vec {
-            a = other.num_vec.iter().rev();
-            b = self.num_vec.iter().rev();
-            signed = !self.signed;
+        if num1 < num2 {
+            a = num2.iter().rev();
+            b = num1.iter().rev();
         } else {
-            a = self.num_vec.iter().rev();
-            b = other.num_vec.iter().rev();
-            signed = self.signed;
+            a = num1.iter().rev();
+            b = num2.iter().rev();
         }
         let mut a_val = a.next();
         let mut b_val = b.next();
@@ -243,21 +325,16 @@ impl BigInt {
             a_val = a.next();
             b_val = b.next();
         }
-
-        return BigInt{
-            signed: signed,
-            num_vec: BigInt::remove_leading_zeros(new_vec)
-        }
+        return new_vec;
     }
 
-    pub fn mul(self, other: BigInt) -> BigInt {
-        let signed = self.signed != other.signed;
+    fn mul_array(num1:Vec<u32>, num2:Vec<u32>) -> Vec<u32> {
         let mut new_vec = vec![];
-        let mut a = self.num_vec.iter().rev();
+        let mut a = num1.iter().rev();
         let mut a_val = a.next();
         let mut a_index = 0;
         while a_val.is_some() {
-            let mut b = other.num_vec.iter().rev();
+            let mut b = num2.iter().rev();
             let mut b_val = b.next();
             let mut b_index = 0;
             let mut carry = 0;
@@ -281,21 +358,6 @@ impl BigInt {
             }
             a_val = a.next();
             a_index += 1;
-        }
-        return BigInt{
-            signed: signed,
-            num_vec: BigInt::remove_leading_zeros(new_vec)
-        };
-    }
-
-    pub fn is_zero(&self) -> bool {
-        self.num_vec.len() == 1 && self.num_vec[0] == 0
-    }
-
-    fn remove_leading_zeros(num_vec: Vec<u32>) -> Vec<u32> {
-        let mut new_vec = num_vec;
-        while new_vec.len() > 1 && new_vec[0] == 0 {
-            new_vec.remove(0);
         }
         return new_vec;
     }
