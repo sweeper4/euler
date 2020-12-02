@@ -87,7 +87,6 @@ fn main() {
     let job_count = problems.len();
 
     if args.len() == 1 {
-<<<<<<< HEAD
         let (tx, rx) = channel();
         for (_, problem) in problems {
             let tx = tx.clone();
@@ -102,73 +101,6 @@ fn main() {
         match problems.get(&problem_num) {
             Some(func) => func(),
             None => println!("Usage: {} [problem #]", args[0])
-=======
-        problems::problem1::problem1();
-        problems::problem2::problem2();
-        problems::problem3::problem3();
-        problems::problem4::problem4();
-        problems::problem5::problem5();
-        problems::problem6::problem6();
-        problems::problem7::problem7();
-        problems::problem8::problem8();
-        problems::problem9::problem9();
-        problems::problem10::problem10();
-        problems::problem11::problem11();
-        problems::problem12::problem12();
-        problems::problem13::problem13();
-        problems::problem14::problem14();
-        problems::problem15::problem15();
-        problems::problem16::problem16();
-        problems::problem17::problem17();
-        problems::problem18::problem18();
-        problems::problem20::problem20();
-        problems::problem23::problem23();
-        problems::problem26::problem26();
-        problems::problem29::problem29();
-        problems::problem32::problem32();
-        problems::problem34::problem34();
-        problems::problem35::problem35();
-        problems::problem38::problem38();
-        problems::problem40::problem40();
-        problems::problem41::problem41();
-        problems::problem44::problem44();
-        problems::problem52::problem52();
-        problems::problem701::problem701();
-    } else {
-        match args[1].parse::<u32>().unwrap() {
-            1 => problems::problem1::problem1(),
-            2 => problems::problem2::problem2(),
-            3 => problems::problem3::problem3(),
-            4 => problems::problem4::problem4(),
-            5 => problems::problem5::problem5(),
-            6 => problems::problem6::problem6(),
-            7 => problems::problem7::problem7(),
-            8 => problems::problem8::problem8(),
-            9 => problems::problem9::problem9(),
-            10 => problems::problem10::problem10(),
-            11 => problems::problem11::problem11(),
-            12 => problems::problem12::problem12(),
-            13 => problems::problem13::problem13(),
-            14 => problems::problem14::problem14(),
-            15 => problems::problem15::problem15(),
-            16 => problems::problem16::problem16(),
-            17 => problems::problem17::problem17(),
-            18 => problems::problem18::problem18(),
-            20 => problems::problem20::problem20(),
-            23 => problems::problem23::problem23(),
-            26 => problems::problem26::problem26(),
-            29 => problems::problem29::problem29(),
-            32 => problems::problem32::problem32(),
-            34 => problems::problem34::problem34(),
-            35 => problems::problem35::problem35(),
-            38 => problems::problem38::problem38(),
-            40 => problems::problem40::problem40(),
-            41 => problems::problem41::problem41(),
-            44 => problems::problem44::problem44(),
-            52 => problems::problem52::problem52(),
-            701 => problems::problem701::problem701(),
-            _ => println!("Usage: {} [problem #]", args[0])
->>>>>>> dd1c23f (Solved 18)
         }
     }
 }

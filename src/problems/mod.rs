@@ -106,6 +106,12 @@ pub fn problem18() {
     problem18::problem18();
 }
 
+mod problem19;
+
+pub fn problem19() {
+    problem19::problem19();
+}
+
 mod problem20;
 
 pub fn problem20() {
