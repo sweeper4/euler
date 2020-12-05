@@ -3,8 +3,7 @@
 
 use std::convert::TryInto;
 use std::cmp::Ordering;
-use std::ops::Rem;
-use std::ops::Mul;
+use std::ops::{Rem, Mul, Add};
 
 #[derive(Debug, Clone)]
 pub struct BigInt {
@@ -44,6 +43,14 @@ impl Mul for BigInt {
 
     fn mul(self, other: BigInt) -> Self::Output {
         return self.mul(other);
+    }
+}
+
+impl Add for BigInt {
+    type Output = Self;
+
+    fn add(self, other: BigInt) -> Self::Output {
+        return self.add(other);
     }
 }
 

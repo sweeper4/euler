@@ -23,6 +23,7 @@ mod problems {
     pub mod problem22;
     pub mod problem23;
     pub mod problem24;
+    pub mod problem25;
     pub mod problem26;
     pub mod problem29;
     pub mod problem32;
@@ -77,6 +78,7 @@ fn main() {
         (22, Box::new(problems::problem22::problem22 as fn() -> ())),
         (23, Box::new(problems::problem23::problem23 as fn() -> ())),
         (24, Box::new(problems::problem24::problem24 as fn() -> ())),
+        (25, Box::new(problems::problem25::problem25 as fn() -> ())),
         (26, Box::new(problems::problem26::problem26 as fn() -> ())),
         (29, Box::new(problems::problem29::problem29 as fn() -> ())),
         (32, Box::new(problems::problem32::problem32 as fn() -> ())),
