@@ -5,7 +5,7 @@ pub fn problem23() {
     println!("The sum of all non-abundant numbers is {}", find_sum_of_non_abundant_sums_under(28123));
 }
 
-fn find_sum_of_non_abundant_sums_under(n:u32) -> u32 {
+fn find_sum_of_non_abundant_sums_under(n:u64) -> u64 {
     let abundant_nums = find_all_abundant_nums_under(n);
 
     let mut i = 1;
@@ -32,12 +32,12 @@ fn find_sum_of_non_abundant_sums_under(n:u32) -> u32 {
     return sum;
 }
 
-fn find_all_abundant_nums_under(n:u32) -> BTreeSet<u32> {
+fn find_all_abundant_nums_under(n:u64) -> BTreeSet<u64> {
     let mut abundant_nums = BTreeSet::new();
     let mut i = 12;
     while i <= n {
         let divisors = number_theory::number_theory::divisors_include_one(i);
-        let sum:u32 = divisors.iter().sum();
+        let sum:u64 = divisors.iter().sum();
         if sum > i {
             abundant_nums.insert(i);
         }

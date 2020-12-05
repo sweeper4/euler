@@ -17,11 +17,9 @@ mod problems {
     pub mod problem16;
     pub mod problem17;
     pub mod problem18;
-<<<<<<< HEAD
     pub mod problem19;
-=======
->>>>>>> dd1c23f (Solved 18)
     pub mod problem20;
+    pub mod problem21;
     pub mod problem23;
     pub mod problem26;
     pub mod problem29;
@@ -73,6 +71,7 @@ fn main() {
         (18, Box::new(problems::problem18::problem18 as fn() -> ())),
         (19, Box::new(problems::problem19::problem19 as fn() -> ())),
         (20, Box::new(problems::problem20::problem20 as fn() -> ())),
+        (21, Box::new(problems::problem21::problem21 as fn() -> ())),
         (23, Box::new(problems::problem23::problem23 as fn() -> ())),
         (26, Box::new(problems::problem26::problem26 as fn() -> ())),
         (29, Box::new(problems::problem29::problem29 as fn() -> ())),
@@ -81,6 +80,8 @@ fn main() {
         (35, Box::new(problems::problem35::problem35 as fn() -> ())),
         (38, Box::new(problems::problem38::problem38 as fn() -> ())),
         (40, Box::new(problems::problem40::problem40 as fn() -> ())),
+        (41, Box::new(problems::problem41::problem41 as fn() -> ())),
+        (44, Box::new(problems::problem44::problem44 as fn() -> ())),
         (52, Box::new(problems::problem52::problem52 as fn() -> ())),
         (701, Box::new(problems::problem701::problem701 as fn() -> ()))
     ].iter().cloned().collect();

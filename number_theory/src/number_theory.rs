@@ -5,26 +5,44 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
 
-pub fn divisors_include_one_and_n(n:u32) -> HashSet<u32> {
-    let mut i = 1;
-    let mut set = HashSet::new();
-    while i <= n {
-        if n % i == 0 {
-            set.insert(i);
+pub fn divisors_include_one_and_n(n:u64) -> HashSet<u64> {
+    let mut factors = vec!();
+    let prime_factors = prime_factors_of(n.into());
+    for (prime, count) in prime_factors {
+        for i in 0..count {
+            factors.push(prime);
         }
-        i += 1;
+    }
+    let mut set = HashSet::new();
+    for i in 0..(2_u32.pow((factors.len()).try_into().unwrap())) {
+        let mut factor:u64 = 1;
+        for j in 0..factors.len() {
+            if (i % (2_u32.pow((j + 1) as u32))) / 2_u32.pow(j as u32) > 0 {
+                factor = factor * factors[j];
+            }
+        }
+        set.insert(factor);
     }
     return set;
 }
 
-pub fn divisors_include_one(n:u32) -> HashSet<u32> {
-    let mut i = 1;
-    let mut set = HashSet::new();
-    while i <= n/2 {
-        if n % i == 0 {
-            set.insert(i);
+pub fn divisors_include_one(n:u64) -> HashSet<u64> {
+    let mut factors = vec!();
+    let prime_factors = prime_factors_of(n.into());
+    for (prime, count) in prime_factors {
+        for i in 0..count {
+            factors.push(prime);
         }
-        i += 1;
+    }
+    let mut set = HashSet::new();
+    for i in 0..(2_u32.pow((factors.len()).try_into().unwrap()) - 1) {
+        let mut factor:u64 = 1;
+        for j in 0..factors.len() {
+            if (i % (2_u32.pow((j + 1) as u32))) / 2_u32.pow(j as u32) > 0 {
+                factor = factor * factors[j];
+            }
+        }
+        set.insert(factor);
     }
     return set;
 }
