@@ -124,6 +124,12 @@ pub fn problem21() {
     problem21::problem21();
 }
 
+mod problem22;
+
+pub fn problem22() {
+    problem22::problem22();
+}
+
 mod problem23;
 
 pub fn problem23() {
