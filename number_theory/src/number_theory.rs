@@ -4,6 +4,7 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
+use sorted_vec::SortedVec;
 
 pub fn divisors_include_one_and_n(n:u64) -> HashSet<u64> {
     let mut factors = vec!();
@@ -161,4 +162,45 @@ pub fn is_pandigital(mut n:u64, m:u64) -> bool {
 pub fn a_choose_b(a:u128, b:u128) -> u128 {
     //This could be made better by dividing when possible, to reduce overflows
     return ((b+1)..(a+1)).fold(1, |a,b| a * b)/(1..b+1).fold(1, |a,b| a * b);
+}
+
+pub fn prime_sieve(n:u64) -> SortedVec<u64> {
+    let mut primes:SortedVec<u64> = SortedVec::new();
+    primes.insert(2);
+    primes.insert(3);
+    primes.insert(5);
+    let mut i = 6;
+    loop {
+        let mut prime = true;
+        for j in primes.iter() {
+            if j * j > i + 1 {
+                break;
+            }
+            if (i + 1) % j == 0 {
+                prime = false;
+                break;
+            }
+        }
+        if prime {
+            primes.insert(i + 1);
+        }
+        prime = true;
+        for j in primes.iter() {
+            if j * j > i + 5 {
+                break;
+            }
+            if (i + 5) % j == 0 {
+                prime = false;
+                break;
+            }
+        }
+        if prime {
+            primes.insert(i + 5);
+        }
+        i += 6;
+        if i >= n {
+            break;
+        }
+    }
+    return primes;
 }
