@@ -204,3 +204,16 @@ pub fn prime_sieve(n:u64) -> SortedVec<u64> {
     }
     return primes;
 }
+
+pub fn gcd(a:u64, b:u64) -> u64 {
+    if b <= 1 {
+        return 1;
+    }
+    if a < b {
+        return gcd(b,a);
+    }
+    if a % b == 0 {
+        return b;
+    }
+    return gcd(b, a % b);
+}

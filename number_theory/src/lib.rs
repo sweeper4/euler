@@ -53,4 +53,12 @@ mod tests {
         expected.insert(vec![3,2,1]);
         assert_eq!(number_theory::permute::<u64>(vec![1, 2, 3]), expected);
     }
+
+    #[test]
+    fn gcd_works() {
+        assert_eq!(9, number_theory::gcd(27, 18));
+        assert_eq!(800, number_theory::gcd(38729600,800));
+        assert_eq!(1, number_theory::gcd(1,100));
+        assert_eq!(1, number_theory::gcd(100,1));
+    }
 }
