@@ -222,3 +222,12 @@ pub fn is_prime(n:u64) -> bool {
     }
     return true;
 }
+
+pub fn is_triangular(n: u64) -> bool {
+    // x(x+1)/2=n
+    // x^2+x=2n
+    // x^2+x-2n=0
+    // -1+-sqrt(1-4*1*-2n)/2
+    let solution = (((1 + 8*n) as f64).sqrt() as u64 - 1)/2;
+    return solution * (solution + 1) / 2 == n;
+}
