@@ -12,3 +12,4 @@ number_theory = { path = "./number_theory" }
 rand = "0.7.3"
 primes = "0.2.4"
 threadpool = "1.7.1"
+sorted-vec = "0.4.0"
