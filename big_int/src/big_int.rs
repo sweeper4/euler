@@ -3,7 +3,7 @@
 
 use std::convert::TryInto;
 use std::cmp::Ordering;
-use std::ops::{Rem, Mul, Add};
+use std::ops::{Rem, Mul, Add, AddAssign};
 
 #[derive(Debug, Clone)]
 pub struct BigInt {
@@ -38,19 +38,29 @@ impl PartialEq for BigInt {
     }
 }
 
-impl Mul for BigInt {
-    type Output = Self;
-
-    fn mul(self, other: BigInt) -> Self::Output {
-        return self.mul(other);
-    }
-}
-
 impl Add for BigInt {
     type Output = Self;
 
     fn add(self, other: BigInt) -> Self::Output {
         return self.add(other);
+    }
+}
+
+impl AddAssign for BigInt {
+    fn add_assign(&mut self, rhs: BigInt) {
+        let result = self.clone().add(rhs);
+        *self = BigInt {
+            signed: result.signed,
+            num_vec: result.num_vec
+        }
+    }
+}
+
+impl Mul for BigInt {
+    type Output = Self;
+
+    fn mul(self, other: BigInt) -> Self::Output {
+        return self.mul(other);
     }
 }
 
