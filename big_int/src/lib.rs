@@ -249,4 +249,29 @@ mod tests {
     fn can_create_really_big_big_ints_from_string_negative() {
         assert_eq!(big_int::BigInt::from_string("-123,000,000,000,000".to_string()), big_int::BigInt::new(-123).mul(big_int::BigInt::new(1000000)).mul(big_int::BigInt::new(1000000)));
     }
+
+    #[test]
+    fn big_int_to_zero_works() {
+        assert_eq!(big_int::BigInt::from_string("1".to_string()), big_int::BigInt::from_string("123,000,000,000,000".to_string()).pow(0));
+    }
+
+    #[test]
+    fn big_int_to_one_works() {
+        assert_eq!(big_int::BigInt::from_string("123,000,000,000,000".to_string()), big_int::BigInt::from_string("123,000,000,000,000".to_string()).pow(1));
+    }
+
+    #[test]
+    fn big_int_to_two_works() {
+        assert_eq!(big_int::BigInt::from_string("15,129,000,000,000,000,000,000,000,000".to_string()), big_int::BigInt::from_string("123,000,000,000,000".to_string()).pow(2));
+    }
+
+    #[test]
+    fn positive_divided_by_one_works() {
+        assert_eq!(big_int::BigInt::from_string("123,000,000,000,000".to_string()), big_int::BigInt::from_string("123,000,000,000,000".to_string()).div(big_int::BigInt::new(1)))
+    }
+
+    #[test]
+    fn positive_divided_by_positive_works() {
+        assert_eq!(big_int::BigInt::from_string("24,600,000,000".to_string()), big_int::BigInt::from_string("123,000,000,000,000".to_string()).div(big_int::BigInt::new(50000)))
+    }
 }

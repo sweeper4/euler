@@ -4,27 +4,46 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
+use sorted_vec::SortedVec;
 
-pub fn divisors_include_one_and_n(n:u32) -> HashSet<u32> {
-    let mut i = 1;
-    let mut set = HashSet::new();
-    while i <= n {
-        if n % i == 0 {
-            set.insert(i);
+pub fn divisors_include_one_and_n(n:u64) -> HashSet<u64> {
+    let mut factors = vec!();
+    let prime_factors = prime_factors_of(n.into());
+    for (prime, count) in prime_factors {
+        for i in 0..count {
+            factors.push(prime);
         }
-        i += 1;
+    }
+    let mut set = HashSet::new();
+    for i in 0..(2_u32.pow((factors.len()).try_into().unwrap())) {
+        let mut factor:u64 = 1;
+        for j in 0..factors.len() {
+            if (i % (2_u32.pow((j + 1) as u32))) / 2_u32.pow(j as u32) > 0 {
+                factor = factor * factors[j];
+            }
+        }
+        set.insert(factor);
     }
     return set;
 }
 
-pub fn divisors_include_one(n:u32) -> HashSet<u32> {
-    let mut i = 1;
-    let mut set = HashSet::new();
-    while i <= n/2 {
-        if n % i == 0 {
-            set.insert(i);
+pub fn divisors_include_one(n:u64) -> HashSet<u64> {
+    let mut factors = vec!();
+    let prime_factors = prime_factors_of(n.into());
+    for (prime, count) in prime_factors {
+        for i in 0..count {
+            factors.push(prime);
         }
-        i += 1;
+    }
+    let mut set = HashSet::new();
+    for i in 0..(2_u32.pow((factors.len()).try_into().unwrap()) - 1) {
+        let mut factor:u64 = 1;
+        for j in 0..factors.len() {
+            if (i % (2_u32.pow((j + 1) as u32))) / 2_u32.pow(j as u32) > 0 {
+                factor = factor * factors[j];
+            }
+        }
+        set.insert(factor);
     }
     return set;
 }
@@ -105,20 +124,110 @@ pub fn prime_factors_of(mut n:u64) -> HashMap<u64,u64> {
     return prime_factors;
 }
 
-pub fn permute<T: Clone + Copy + Eq + std::hash::Hash>(list:Vec<T>) -> HashSet<Vec<T>> {
-    let mut final_result = HashSet::new();
+pub fn permute<T: Clone + Copy + Eq + std::hash::Hash>(list:Vec<T>) -> Vec<Vec<T>> {
+    let mut final_result = Vec::new();
     if list.is_empty() {
-        final_result.insert(vec![]);
+        final_result.push(vec![]);
         return final_result;
     }
     let first = list[0];
-    let recursive_result:HashSet<Vec<T>> = permute::<T>(list[1..list.len()].to_vec());
+    let recursive_result:Vec<Vec<T>> = permute::<T>(list[1..list.len()].to_vec());
     for result in recursive_result {
         for i in 0..result.len()+1 {
             let mut mut_result:Vec<T> = result.clone();
             mut_result.insert(i,first);
-            final_result.insert(mut_result);
+            final_result.push(mut_result);
         }
     }
     return final_result;
+}
+
+pub fn is_pandigital(mut n:u64, m:u64) -> bool {
+    let mut digits = HashSet::new();
+    while n > 0 {
+        digits.insert(n % 10);
+        n /= 10;
+    }
+    if digits.len() != m.try_into().unwrap() {
+        return false;
+    }
+    for i in 1..(m+1) {
+        if !digits.contains(&i) {
+            return false;
+        }
+    }
+    return true;
+}
+
+pub fn a_choose_b(a:u128, b:u128) -> u128 {
+    //This could be made better by dividing when possible, to reduce overflows
+    return ((b+1)..(a+1)).fold(1, |a,b| a * b)/(1..b+1).fold(1, |a,b| a * b);
+}
+
+pub fn prime_sieve(n:u64) -> SortedVec<u64> {
+    let mut primes:SortedVec<u64> = SortedVec::new();
+    if n >= 2 {
+        primes.insert(2);
+    }
+    if n >= 3 {
+        primes.insert(3);
+    }
+    if n >= 5 {
+        primes.insert(5);
+    }
+    let mut i = 2;
+    loop {
+        for j in &[5, 9, 11, 15, 17, 21, 27, 29, 35, 39, 41, 45, 47, 51, 57, 59] { //all primes (except 2,3,5) are one of these offsets (+2) from a multiple of 60
+            if i + j > n {
+                return primes;
+            }
+            let mut is_prime = true;
+            for prime in primes.iter() {
+                if (i + j) % prime == 0 {
+                    is_prime = false;
+                    break;
+                }
+            }
+            if is_prime {
+                primes.insert(i + j);
+            }
+        }
+        i += 60;
+    }
+}
+
+pub fn gcd(a:u64, b:u64) -> u64 {
+    if b <= 1 {
+        return 1;
+    }
+    if a < b {
+        return gcd(b,a);
+    }
+    if a % b == 0 {
+        return b;
+    }
+    return gcd(b, a % b);
+}
+
+pub fn is_prime(n:u64) -> bool {
+    if n % 2 == 0 {
+        return n == 2;
+    }
+    let mut i = 3;
+    while i <= n / i {
+        if n % i == 0 {
+            return false;
+        }
+        i += 2;
+    }
+    return true;
+}
+
+pub fn is_triangular(n: u64) -> bool {
+    // x(x+1)/2=n
+    // x^2+x=2n
+    // x^2+x-2n=0
+    // -1+-sqrt(1-4*1*-2n)/2
+    let solution = (((1 + 8*n) as f64).sqrt() as u64 - 1)/2;
+    return solution * (solution + 1) / 2 == n;
 }

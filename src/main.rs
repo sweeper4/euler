@@ -13,16 +13,41 @@ mod problems {
     pub mod problem12;
     pub mod problem13;
     pub mod problem14;
+    pub mod problem15;
+    pub mod problem16;
     pub mod problem17;
+    pub mod problem18;
+    pub mod problem19;
     pub mod problem20;
+    pub mod problem21;
+    pub mod problem22;
     pub mod problem23;
+    pub mod problem24;
+    pub mod problem25;
     pub mod problem26;
+    pub mod problem27;
+    pub mod problem28;
     pub mod problem29;
+    pub mod problem30;
+    pub mod problem31;
     pub mod problem32;
+    pub mod problem33;
     pub mod problem34;
     pub mod problem35;
+    pub mod problem36;
+    pub mod problem37;
     pub mod problem38;
+    pub mod problem39;
     pub mod problem40;
+    pub mod problem41;
+    pub mod problem42;
+    pub mod problem43;
+    pub mod problem44;
+    pub mod problem45;
+    pub mod problem46;
+    pub mod problem47;
+    pub mod problem48;
+    pub mod problem49;
     pub mod problem52;
     pub mod problem701;
 }
@@ -58,16 +83,41 @@ fn main() {
         (12, Box::new(problems::problem12::problem12 as fn() -> ())),
         (13, Box::new(problems::problem13::problem13 as fn() -> ())),
         (14, Box::new(problems::problem14::problem14 as fn() -> ())),
+        (15, Box::new(problems::problem15::problem15 as fn() -> ())),
+        (16, Box::new(problems::problem16::problem16 as fn() -> ())),
         (17, Box::new(problems::problem17::problem17 as fn() -> ())),
+        (18, Box::new(problems::problem18::problem18 as fn() -> ())),
+        (19, Box::new(problems::problem19::problem19 as fn() -> ())),
         (20, Box::new(problems::problem20::problem20 as fn() -> ())),
+        (21, Box::new(problems::problem21::problem21 as fn() -> ())),
+        (22, Box::new(problems::problem22::problem22 as fn() -> ())),
         (23, Box::new(problems::problem23::problem23 as fn() -> ())),
+        (24, Box::new(problems::problem24::problem24 as fn() -> ())),
+        (25, Box::new(problems::problem25::problem25 as fn() -> ())),
         (26, Box::new(problems::problem26::problem26 as fn() -> ())),
+        (27, Box::new(problems::problem27::problem27 as fn() -> ())),
+        (28, Box::new(problems::problem28::problem28 as fn() -> ())),
         (29, Box::new(problems::problem29::problem29 as fn() -> ())),
+        (30, Box::new(problems::problem30::problem30 as fn() -> ())),
+        (31, Box::new(problems::problem31::problem31 as fn() -> ())),
         (32, Box::new(problems::problem32::problem32 as fn() -> ())),
+        (33, Box::new(problems::problem33::problem33 as fn() -> ())),
         (34, Box::new(problems::problem34::problem34 as fn() -> ())),
         (35, Box::new(problems::problem35::problem35 as fn() -> ())),
+        (36, Box::new(problems::problem36::problem36 as fn() -> ())),
+        (37, Box::new(problems::problem37::problem37 as fn() -> ())),
         (38, Box::new(problems::problem38::problem38 as fn() -> ())),
+        (39, Box::new(problems::problem39::problem39 as fn() -> ())),
         (40, Box::new(problems::problem40::problem40 as fn() -> ())),
+        (41, Box::new(problems::problem41::problem41 as fn() -> ())),
+        (42, Box::new(problems::problem42::problem42 as fn() -> ())),
+        (43, Box::new(problems::problem43::problem43 as fn() -> ())),
+        (44, Box::new(problems::problem44::problem44 as fn() -> ())),
+        (45, Box::new(problems::problem45::problem45 as fn() -> ())),
+        (46, Box::new(problems::problem46::problem46 as fn() -> ())),
+        (47, Box::new(problems::problem47::problem47 as fn() -> ())),
+        (48, Box::new(problems::problem48::problem48 as fn() -> ())),
+        (49, Box::new(problems::problem49::problem49 as fn() -> ())),
         (52, Box::new(problems::problem52::problem52 as fn() -> ())),
         (701, Box::new(problems::problem701::problem701 as fn() -> ()))
     ].iter().cloned().collect();
@@ -87,7 +137,7 @@ fn main() {
         let problem_num = args[1].parse::<u32>().unwrap();
         match problems.get(&problem_num) {
             Some(func) => func(),
-            None => println!("Usage: {} [problem #]", args[0]),
+            None => println!("Usage: {} [problem #]", args[0])
         }
     }
 }
