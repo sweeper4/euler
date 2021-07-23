@@ -1,8 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use std::collections::HashMap;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet, BTreeSet};
 use std::convert::TryInto;
 use sorted_vec::SortedVec;
 
@@ -194,6 +193,94 @@ pub fn prime_sieve(n:u64) -> SortedVec<u64> {
         }
         i += 60;
     }
+}
+
+pub fn prime_sieve_btree(n:u64) -> BTreeSet<u64> {
+    let mut primes = BTreeSet::new();
+    let primes_hardcoded = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59];
+    
+    for prime in primes_hardcoded.iter() {
+        if *prime <= n {
+            primes.insert(*prime);
+        }
+    }
+
+    let mut i = 60;
+    while i < n {
+        for j in &[1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59] { //all primes (except 2,3,5) are one of these offsets from a multiple of 60
+            if i + j > n {
+                return primes;
+            }
+            let mut is_prime = true;
+            for prime in primes.iter() {
+                if (i + j) % prime == 0 {
+                    is_prime = false;
+                    break;
+                }
+            }
+            if is_prime {
+                primes.insert(i+j);
+            }
+        }
+        i += 60;
+    }
+
+    return primes;
+}
+
+pub fn prime_sieve_btree_2(n:u64) -> BTreeSet<u64> {
+    let mut primes:SortedVec<u64> = SortedVec::new();
+    let primes_hardcoded = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59];
+    
+    for prime in primes_hardcoded.iter() {
+        if *prime <= n {
+            primes.insert(*prime);
+        }
+    }
+
+    let mut i = 60;
+    while i < n {
+        for j in &[1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59] { //all primes (except 2,3,5) are one of these offsets from a multiple of 60
+            if i + j > n {
+                let btree:BTreeSet<u64> = primes.iter().map(|x| *x).collect();
+                return btree;
+            }
+            let mut is_prime = true;
+            for prime in primes.iter() {
+                if (i + j) % prime == 0 {
+                    is_prime = false;
+                    break;
+                }
+            }
+            if is_prime {
+                primes.insert(i+j);
+            }
+        }
+        i += 60;
+    }
+
+    return primes.iter().map(|x| *x).collect();
+}
+
+pub fn prime_sieve_btree_3(n:u64) -> BTreeSet<u64> {
+    let mut primes:SortedVec<u64> = SortedVec::new();
+
+    let mut i = 2;
+    while i < n {
+        let mut is_prime = true;
+        for prime in primes.iter() {
+            if i % prime == 0 {
+                is_prime = false;
+                break;
+            }
+        }
+        if is_prime {
+            primes.insert(i);
+        }
+        i += 1;
+    }
+
+    return primes.iter().map(|x| *x).collect();
 }
 
 pub fn gcd(a:u64, b:u64) -> u64 {
