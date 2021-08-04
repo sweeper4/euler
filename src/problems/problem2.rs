@@ -17,27 +17,25 @@ struct Fb {
 
 impl Fb {
     fn get( &mut self,index: usize) -> usize {
-        match index {
-            0 => return 1_usize,
-            1 => return 2_usize,
-            _ =>
-                match self.cache.get(index - 2) {
-                    Some( a ) => {
-                        return *a 
-                    },
-                    None => {
-                        let r = self.get(index - 2) + self.get( index - 1 );
-                        self.cache.push(r);
-                        return r
-                    }
-                }
+        match self.cache.get(index) {
+            Some( a ) => {
+                return *a 
+            },
+            None => {
+                let r = self.get(index - 2) + self.get( index - 1 );
+                self.cache.push(r);
+                return r
+            }
         }
     }
 
     fn new() -> Fb {
-        Fb {
+        let mut value = Fb {
             cache: Vec::new()
-        }
+        };
+        value.cache.push(0);
+        value.cache.push(1);
+        return value;
     }
 }
 pub fn problem2() {
