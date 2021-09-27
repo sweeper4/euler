@@ -50,6 +50,7 @@ mod problems {
     pub mod problem49;
     pub mod problem51;
     pub mod problem52;
+    pub mod problem53;
     pub mod problem701;
 }
 extern crate threadpool;
@@ -121,6 +122,7 @@ fn main() {
         (49, Box::new(problems::problem49::problem49 as fn() -> ())),
         (51, Box::new(problems::problem51::problem51 as fn() -> ())),
         (52, Box::new(problems::problem52::problem52 as fn() -> ())),
+        (53, Box::new(problems::problem53::problem53 as fn() -> ())),
         (701, Box::new(problems::problem701::problem701 as fn() -> ()))
     ].iter().cloned().collect();
     let job_count = problems.len();

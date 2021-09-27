@@ -3,7 +3,7 @@
 
 use std::convert::TryInto;
 use std::cmp::Ordering;
-use std::ops::{Rem, Mul, Add, AddAssign};
+use std::ops::{Rem, Add, AddAssign, Mul, MulAssign};
 
 #[derive(Debug, Clone)]
 pub struct BigInt {
@@ -61,6 +61,16 @@ impl Mul for BigInt {
 
     fn mul(self, other: BigInt) -> Self::Output {
         return self.mul(other);
+    }
+}
+
+impl MulAssign for BigInt {
+    fn mul_assign(&mut self, rhs: BigInt) {
+        let result = self.clone().mul(rhs);
+        *self = BigInt {
+            signed: result.signed,
+            num_vec: result.num_vec
+        }
     }
 }
 

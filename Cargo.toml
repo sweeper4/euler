@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 big_int = { path = "./big_int" }
 number_theory = { path = "./number_theory" }
+fraction = { path = "./fraction" }
 rand = "0.7.3"
 primes = "0.2.4"
 threadpool = "1.7.1"
