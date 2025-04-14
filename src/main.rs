@@ -50,6 +50,7 @@ mod problems {
     pub mod problem49;
     pub mod problem50;
     pub mod problem52;
+    pub mod problem53;
     pub mod problem701;
 }
 extern crate threadpool;
@@ -60,6 +61,10 @@ use std::sync::mpsc::channel;
 use std::collections::HashMap;
 
 fn main() {
+    problems::problem53::problem53();
+}
+
+fn main_2() {
 
     let args: Vec<String> = env::args().collect();
     let workers = 12;
@@ -121,6 +126,7 @@ fn main() {
         (49, Box::new(problems::problem49::problem49 as fn() -> ())),
         (50, Box::new(problems::problem50::problem50 as fn() -> ())),
         (52, Box::new(problems::problem52::problem52 as fn() -> ())),
+        (53, Box::new(problems::problem53::problem53 as fn() -> ())),
         (701, Box::new(problems::problem701::problem701 as fn() -> ()))
     ].iter().cloned().collect();
     let job_count = problems.len();
