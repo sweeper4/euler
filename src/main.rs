@@ -61,11 +61,6 @@ use std::sync::mpsc::channel;
 use std::collections::HashMap;
 
 fn main() {
-    problems::problem53::problem53();
-}
-
-fn main_2() {
-
     let args: Vec<String> = env::args().collect();
     let workers = 12;
     let pool = ThreadPool::new(workers);
