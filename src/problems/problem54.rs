@@ -1,4 +1,3 @@
-use std::cmp;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -10,7 +9,7 @@ pub fn solve() {
     let lines = BufReader::new(file).lines();
     for line in lines {
         let line = line.unwrap();
-        let mut cards: Vec<&str> = line.split(' ').collect();
+        let cards: Vec<&str> = line.split(' ').collect();
         let mut left_hand = vec![];
         let mut right_hand = vec![];
         for card in cards {
