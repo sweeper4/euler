@@ -1,4 +1,4 @@
-pub fn problem36() {
+pub fn solve() {
     let mut sum = 0;
     for i in 1..1000000 {
         if is_palindrome(format!("{:b}", i)) && is_palindrome(i.to_string()) {

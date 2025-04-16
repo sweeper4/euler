@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 use std::collections::HashSet;
 
-pub fn problem44() {
+pub fn solve() {
     println!("The pentagonal values a and b, where a+b and a-b are also pentagonal, minimizing abs(a-b), has a difference of {}", find_least_pentagonal_difference());
 }
 

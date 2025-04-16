@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-pub fn problem35() {
+pub fn solve() {
     println!("There are {} circular primes below 1,000,000", count_circular_primes_below(1000000));
 }
 

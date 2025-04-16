@@ -1,7 +1,7 @@
 use number_theory::number_theory;
 use sorted_vec::SortedVec;
 
-pub fn problem47() {
+pub fn solve() {
     let primes = number_theory::prime_sieve(150000);
     let mut i = 15;
     loop {

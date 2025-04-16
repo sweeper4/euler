@@ -11,7 +11,7 @@ while (True):
     i+=1
 */
 
-pub fn problem34() {
+pub fn solve() {
     println!("The sum of all numbers that are equal to the sum of the factorial of their digits is {}",sum_values_whose_value_is_the_sum_of_their_digits_factorial());
 }
 

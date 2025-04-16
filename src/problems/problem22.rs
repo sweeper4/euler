@@ -1,6 +1,6 @@
 use std::fs;
 
-pub fn problem22() {
+pub fn solve() {
     let contents = fs::read_to_string("src/assets/problem22Names.csv").expect("Something went wrong reading the file");
     let mut names: Vec<&str> = contents.split(',').collect();
 

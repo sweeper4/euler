@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 use std::collections::HashSet;
 
-pub fn problem32() {
+pub fn solve() {
     println!("The sum of all products p, where a*b=p, where abp is 1-9 pandigital, is {}", sum_products_of_pandigital_equations());
 }
 

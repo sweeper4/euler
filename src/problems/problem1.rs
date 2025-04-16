@@ -10,6 +10,6 @@ fn sum_to(max: u32) -> u32 {
     (max * (max + 1)) / 2
 }
 
-pub fn problem1() {
+pub fn solve() {
     println!("sum of the threes and fives is {} lower than {}",multiples_of_3_5(1000),1000);
 }

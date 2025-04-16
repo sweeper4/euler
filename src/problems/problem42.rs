@@ -2,7 +2,7 @@ use std::fs;
 use std::collections::HashMap;
 use number_theory::number_theory;
 
-pub fn problem42() {
+pub fn solve() {
     let mut triangular_nums:HashMap<u64, bool> = HashMap::new();
 
     let contents = fs::read_to_string("src/assets/problem42words.csv").expect("Something went wrong reading the file");

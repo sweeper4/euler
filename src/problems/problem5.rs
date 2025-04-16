@@ -38,6 +38,6 @@ fn get_sqrt_aprox(base: usize) -> usize {
     return old_guess
 }
 
-pub fn problem5() {
+pub fn solve() {
     println!("The smallest multiple of numbers less than {} is {}",20,smallest_multiple(20));
 }

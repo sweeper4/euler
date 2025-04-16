@@ -1,4 +1,4 @@
-pub fn problem41() {
+pub fn solve() {
     println!("Just another pandigital prime problem, answers {}", solve_the_thing());
 }
 

@@ -1,6 +1,6 @@
 // use std::collections::HashMap;
 
-pub fn problem701() {
+pub fn solve() {
     println!("The expected area of the largest consequtive group of black blocks in a randomly determined 7x7 board is {}", find_the_damn_area(7));
 }
 

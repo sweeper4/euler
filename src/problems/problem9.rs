@@ -1,4 +1,4 @@
-pub fn problem9() {
+pub fn solve() {
     println!("The only pythagorean triple that sums to 1000 has a product of {}", get_pythagorean_triple_that_sums_to(1000));
 }
 

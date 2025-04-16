@@ -5,7 +5,7 @@ for i in range(1000000):
 print(int(acc[1]) * int(acc[10]) * int(acc[100]) * int(acc[1000]) * int(acc[10000]) * int(acc[100000]) * int(acc[1000000]))
 */
 
-pub fn problem40() {
+pub fn solve() {
     println!("The product of the 1st, 10th, 100th, 1,000th, 10,000th, 100,000th and 1,000,000th values in Champernowne's constant is {}", mul_powers_of_ten_digits_of_funny_constant());
 }
 

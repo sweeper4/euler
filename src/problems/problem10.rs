@@ -1,4 +1,4 @@
-pub fn problem10() {
+pub fn solve() {
     println!("The sum of primes less than {} is {}", 2000000, sum_sequence(get_primes_less_than(2000000)));
 }
 

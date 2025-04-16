@@ -1,7 +1,7 @@
 use number_theory::number_theory;
 use std::collections::BTreeMap;
 
-pub fn problem49() {
+pub fn solve() {
     let primes:Vec<u64> = number_theory::prime_sieve(10000).iter().map(|x| return *x).filter(|x| *x > 999).collect();
     let mut primes_map: BTreeMap<u64, Vec<u64>> = BTreeMap::new();
     for prime in primes {

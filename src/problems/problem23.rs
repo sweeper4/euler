@@ -1,7 +1,7 @@
 use number_theory;
 use std::collections::BTreeSet;
 
-pub fn problem23() {
+pub fn solve() {
     println!("The sum of all non-abundant numbers is {}", find_sum_of_non_abundant_sums_under(28123));
 }
 

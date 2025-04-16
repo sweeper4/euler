@@ -1,6 +1,6 @@
 use number_theory;
 
-pub fn problem21() {
+pub fn solve() {
     let mut amicable_sum = 0;
     let mut vec = vec!();
     vec.push(0);

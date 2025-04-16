@@ -1,4 +1,4 @@
-pub fn problem19() {
+pub fn solve() {
     let mut count = 0;
     let mut year = 1901;
     let mut month = 1;

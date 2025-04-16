@@ -1,4 +1,4 @@
-pub fn problem28() {
+pub fn solve() {
     let mut i = 1;
     let mut sum = 1;
     let mut increase = 2;

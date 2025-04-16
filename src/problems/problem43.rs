@@ -1,6 +1,6 @@
 use number_theory::number_theory;
 
-pub fn problem43() {
+pub fn solve() {
     let mut sum = 0_u64;
     let pandigitals = number_theory::permute(vec!(0,1,2,3,4,5,6,7,8,9));
     for pandigital in pandigitals {

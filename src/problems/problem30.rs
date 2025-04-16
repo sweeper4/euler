@@ -1,4 +1,4 @@
-pub fn problem30() {
+pub fn solve() {
     let mut i = 10;
     let mut running_sum = 0;
     loop {

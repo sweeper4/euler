@@ -1,6 +1,6 @@
 use std::convert::TryInto;
 
-pub fn problem38() {
+pub fn solve() {
     println!("The largest 1-9 pandigital created by concatenating 1a, 2a, ... na is {}", find_largest_pandigital());
 }
 

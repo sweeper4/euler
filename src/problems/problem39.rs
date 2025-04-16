@@ -1,4 +1,4 @@
-pub fn problem39() {
+pub fn solve() {
     let mut max_p = 0;
     let mut max_solution = 0;
     for p in 1..1001 {

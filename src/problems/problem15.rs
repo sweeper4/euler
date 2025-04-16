@@ -1,6 +1,6 @@
 use number_theory;
 
-pub fn problem15() {
+pub fn solve() {
     println!("There are {} down/right ways through a 20x20 grid", get_routes_through_grid(20,20));
 }
 

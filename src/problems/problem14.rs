@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn problem14() {
+pub fn solve() {
     println!("The longest collatz sequence beginning with a value less than 1,000,000 begins with {}", get_longest_collatz_under(1000000));
 }
 

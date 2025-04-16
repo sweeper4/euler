@@ -1,4 +1,4 @@
-pub fn problem7() {
+pub fn solve() {
     println!("The 10,001th prime is {}", get_nth_prime(10001));
 }
 

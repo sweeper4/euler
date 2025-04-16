@@ -1,6 +1,6 @@
 use number_theory::number_theory;
 
-pub fn problem46() {
+pub fn solve() {
     let primes = number_theory::prime_sieve(10000);
     let mut i = 7;
     loop {

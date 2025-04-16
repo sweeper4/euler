@@ -1,6 +1,6 @@
 use number_theory::number_theory;
 //this is facstoer beuilging up from smaller primes instead of decomponsing all potatntial primes but imma not write that
-pub fn problem37() {
+pub fn solve() {
     let mut sum = 0;
     let primes = number_theory::prime_sieve(750000);
     for i in primes.iter() {

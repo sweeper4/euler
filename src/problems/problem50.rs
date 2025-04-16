@@ -1,6 +1,6 @@
 use number_theory::number_theory;
 
-pub fn problem50() {
+pub fn solve() {
     println!("The longest series of consequetive primes that sums to a prime under 1,000,000 sums to {}", find_largest_prime_sum_of_sequential_primes_under(1000000));
 }
 

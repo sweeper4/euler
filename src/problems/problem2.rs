@@ -38,6 +38,6 @@ impl Fb {
         return value;
     }
 }
-pub fn problem2() {
+pub fn solve() {
     println!("total of even fibonacci numbers = {}", sum_evens_less_than(4000000));
 }

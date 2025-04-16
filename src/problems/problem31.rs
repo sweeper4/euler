@@ -1,4 +1,4 @@
-pub fn problem31() {
+pub fn solve() {
     let value = [200, 100, 50, 20, 10, 5, 2, 1];
     let count = recurse(&value, 200);
     println!("THere are {} ways to make 2 pounds with coins", count);

@@ -49,6 +49,6 @@ impl DigitIter {
     }
 }
 
-pub fn problem4() {
+pub fn solve() {
     println!("Max palindrome {}",max_palindrome_multiple_between(100,999));
 }

@@ -1,7 +1,7 @@
 use number_theory;
 use std::convert::TryInto;
 
-pub fn problem26() {
+pub fn solve() {
     println!("The number with the longest repeating section of it's decimal representation below 1000 is {}", find_longest_period_of_decimal_representations_below(1000));
 }
 

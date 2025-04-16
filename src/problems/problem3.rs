@@ -47,6 +47,6 @@ fn get_prime_factors(number: usize) -> Vec<usize> {
     return factors
 }
 
-pub fn problem3() {
+pub fn solve() {
     println!("The max prime factor of {} is {}",600851475143_u64,get_max_factor(600851475143));
 }

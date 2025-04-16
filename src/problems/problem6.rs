@@ -13,6 +13,6 @@ fn sum_to(max: u32) -> u32 {
     (max * (max + 1)) / 2
 }
 
-pub fn problem6() {
+pub fn solve() {
     println!("The difference between the sum of the squares and the square of the sum from 1 to 100 is {}",compute_difference_between_square_of_sums_and_sum_of_squares(100));
 }

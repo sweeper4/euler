@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::collections::BTreeMap;
 
-pub fn problem29() {
+pub fn solve() {
     println!("The number of distinct values of all a^b where 2 <= a <= 100 and 2 <= b <= 100 is {}", count_distinct_powers(100,100));
 }
 

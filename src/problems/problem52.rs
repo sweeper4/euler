@@ -19,7 +19,7 @@ while(True):
     i+=1
 */
 
-pub fn problem52() {
+pub fn solve() {
     println!("The least positive value x, where x is an anagram of 2x, 3x, 4x, 5x, and 6x, is {}", get_least_multiple_fold_anagram(6));
 }
 

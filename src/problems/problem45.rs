@@ -1,4 +1,4 @@
-pub fn problem45() {
+pub fn solve() {
     let mut pent_index = 166;
     let mut hex_index = 144;
 

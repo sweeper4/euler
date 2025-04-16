@@ -1,6 +1,6 @@
 use number_theory::number_theory;
 
-pub fn problem33() {
+pub fn solve() {
     let mut numerator = 1_u64;
     let mut denominator = 1_u64;
     for i in 1..10_u64 {

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn problem17() {
+pub fn solve() {
     println!("If all the numbers 1 to 1000 were written out, {} letters would be used", count_characters_in_all_numbers_less_than(1000));
 }
 

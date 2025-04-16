@@ -16,7 +16,7 @@ const TRIANGLE: [[u32;15];15] = [
     [75,00,00,00,00,00,00,00,00,00,00,00,00,00,00]
 ];
 
-pub fn problem18() {
+pub fn solve() {
     let mut memoized_row = [0; 16];
     for row in 0..TRIANGLE.len() {
         for col in 0..(TRIANGLE[row].len()-row) {

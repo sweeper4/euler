@@ -1,6 +1,6 @@
 use big_int::BigInt;
 
-pub fn problem25() {
+pub fn solve() {
     let mut a = BigInt::new(1);
     let mut b = BigInt::new(1);
     let mut b_index = 2;

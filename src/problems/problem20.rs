@@ -1,6 +1,6 @@
 use big_int::BigInt;
 
-pub fn problem20() {
+pub fn solve() {
     println!("The sum of the digits of 100! is {}", sum_digits_of(factorial(100)));
 }
 

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn problem12() {
+pub fn solve() {
     println!("The first triangular number with more than {} divisors is {}", 500, find_first_triangular_number_with_specified_number_of_divisors(500));
 }
 
