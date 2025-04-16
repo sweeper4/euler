@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
 use sorted_vec::SortedVec;
+use num_traits::int::PrimInt;
 
 pub fn divisors_include_one_and_n(n:u64) -> HashSet<u64> {
     let mut factors = vec!();
@@ -159,9 +160,46 @@ pub fn is_pandigital(mut n:u64, m:u64) -> bool {
     return true;
 }
 
-pub fn a_choose_b(a:u128, b:u128) -> u128 {
-    //This could be made better by dividing when possible, to reduce overflows
-    return ((b+1)..(a+1)).fold(1, |a,b| a * b)/(1..b+1).fold(1, |a,b| a * b);
+pub fn a_choose_b<N: PrimInt>(a:N, b:N) -> N {
+    let one = N::one();
+    let mut numerators = {
+        let mut list = vec![];
+        let mut i = b+one;
+        while i < a+one {
+            list.push(i);
+            i = i + one;
+        }
+        list
+    };
+    let mut denominators = {
+        let mut list = vec![];
+        let mut i = one;
+        while i <= a-b {
+            list.push(i);
+            i = i + one;
+        }
+        list
+    };
+    for i in 0..numerators.len() {
+        if numerators[i] == one {
+            continue;
+        }
+        for j in 0..denominators.len() {
+            let common = gcd(numerators[i], denominators[j]);
+            if common > one {
+                numerators[i] = numerators[i] / common;
+                denominators[j] = denominators[j] / common;
+            }
+        }
+    }
+    let mut result = one;
+    for num in numerators {
+        result = result * num;
+    }
+    for denum in denominators {
+        result = result / denum;
+    }
+    return result;
 }
 
 pub fn prime_sieve(n:u64) -> SortedVec<u64> {
@@ -196,14 +234,14 @@ pub fn prime_sieve(n:u64) -> SortedVec<u64> {
     }
 }
 
-pub fn gcd(a:u64, b:u64) -> u64 {
-    if b <= 1 {
-        return 1;
+pub fn gcd<N: PrimInt>(a:N, b:N) -> N {
+    if b <= N::one() {
+        return N::one();
     }
     if a < b {
         return gcd(b,a);
     }
-    if a % b == 0 {
+    if a % b == N::zero() {
         return b;
     }
     return gcd(b, a % b);
