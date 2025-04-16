@@ -254,19 +254,18 @@ impl BigInt {
     /**
         Does not support negative exponents currently
     */
-    pub fn pow(self, pow: u32) -> BigInt {
+    pub fn pow(self, mut pow: u32) -> BigInt {
         let mut product = BigInt::new(1);
         let mut temp = self;
-        let mut digit = 2;
         loop {
-            if pow % digit != 0 {
+            if pow % 2 != 0 {
                 product = product * temp.clone();
             }
             temp = temp.clone() * temp.clone();
-            if digit > pow {
+            if pow == 0 {
                 return product;
             }
-            digit *= 2;
+            pow /= 2;
         }
     }
 
@@ -377,5 +376,16 @@ impl BigInt {
             a_index += 1;
         }
         return new_vec;
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::BigInt;
+
+    #[test]
+    fn big_int_pow_works() {
+        assert_eq!(BigInt::new(5).pow(5), BigInt::from_string("3125".to_owned()));
+        assert_eq!(BigInt::new(99).pow(99), BigInt::from_string("369729637649726772657187905628805440595668764281741102430259972423552570455277523421410650010128232727940978889548326540119429996769494359451621570193644014418071060667659301384999779999159200499899".to_owned()));
     }
 }
