@@ -3,7 +3,9 @@
 
 use std::convert::TryInto;
 use std::cmp::Ordering;
-use std::ops::{Rem, Mul, Add, AddAssign};
+use std::ops::{Rem, Mul, Add, AddAssign, Div};
+
+use num_traits::{Zero, One};
 
 #[derive(Debug, Clone)]
 pub struct BigInt {
@@ -68,11 +70,31 @@ impl Rem for BigInt {
     type Output = Self;
 
     fn rem(self, modulus: Self) -> Self::Output {
-        // let mut temp = self;
-        // while temp < modulus {
-        //     temp 
-        // }
-        return self;
+        return self.rem(modulus);
+    }
+}
+
+impl Div for BigInt {
+    type Output = Self;
+
+    fn div(self, b: Self) -> Self::Output {
+        return self.div(b);
+    }
+}
+
+impl Zero for BigInt {
+    fn zero() -> Self {
+        BigInt::from_string("0".to_owned())
+    }
+
+    fn is_zero(&self) -> bool {
+        self.is_zero()
+    }
+}
+
+impl One for BigInt {
+    fn one() -> Self {
+        BigInt::from_string("1".to_owned())
     }
 }
 
@@ -245,6 +267,10 @@ impl BigInt {
             signed: signed,
             num_vec: BigInt::remove_leading_zeros(BigInt::mul_array(self.num_vec, other.num_vec))
         };
+    }
+
+    pub fn rem(self, other: BigInt) -> BigInt {
+        panic!()
     }
 
     pub fn div(self, other: BigInt) -> BigInt {

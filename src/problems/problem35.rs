@@ -1,11 +1,13 @@
 use std::collections::HashSet;
 
+use primes::PrimeSet;
+
 pub fn solve() {
     println!("There are {} circular primes below 1,000,000", count_circular_primes_below(1000000));
 }
 
 fn count_circular_primes_below(n:u64) -> usize {
-    let mut primes = primes::PrimeSet::new();
+    let mut primes = primes::Sieve::new();
     let mut primes_under_n = HashSet::new();
     let mut primes_seen = HashSet::new();
     let mut count = 0;

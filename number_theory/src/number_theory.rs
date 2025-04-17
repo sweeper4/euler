@@ -1,9 +1,14 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+use core::num;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
+use std::ops::Rem;
+use num_traits::One;
+use num_traits::Zero;
+use primes::PrimeSet;
 use sorted_vec::SortedVec;
 use num_traits::int::PrimInt;
 
@@ -107,7 +112,7 @@ pub fn transform_fraction_into_decimal_notation(mut num: i32, denum: i32) -> Dec
 }
 
 pub fn prime_factors_of(mut n:u64) -> HashMap<u64,u64> {
-    let mut primes = primes::PrimeSet::new();
+    let mut primes = primes::Sieve::new();
     let mut prime_factors = HashMap::new();
     for prime in primes.iter() {
         let mut count = 0;
@@ -185,7 +190,7 @@ pub fn a_choose_b<N: PrimInt>(a:N, b:N) -> N {
             continue;
         }
         for j in 0..denominators.len() {
-            let common = gcd(numerators[i], denominators[j]);
+            let common = gcd(&numerators[i], &denominators[j]);
             if common > one {
                 numerators[i] = numerators[i] / common;
                 denominators[j] = denominators[j] / common;
@@ -234,17 +239,20 @@ pub fn prime_sieve(n:u64) -> SortedVec<u64> {
     }
 }
 
-pub fn gcd<N: PrimInt>(a:N, b:N) -> N {
+pub fn gcd<N: One + Zero + PartialOrd + Rem<Output = N> + Clone>(a:&N, b:&N) -> N {
+    let a = (*a).clone();
+    let b = (*b).clone();
     if b <= N::one() {
         return N::one();
-    }
-    if a < b {
-        return gcd(b,a);
-    }
-    if a % b == N::zero() {
+    } else if a < b {
+        return gcd(&b,&a);
+    } else if a.clone() % b.clone() == N::zero() {
         return b;
+    } else {
+        let new_a = b.clone();
+        let new_b = a % b;
+        return gcd(&new_a, &new_b);
     }
-    return gcd(b, a % b);
 }
 
 pub fn is_prime(n:u64) -> bool {
@@ -268,4 +276,102 @@ pub fn is_triangular(n: u64) -> bool {
     // -1+-sqrt(1-4*1*-2n)/2
     let solution = (((1 + 8*n) as f64).sqrt() as u64 - 1)/2;
     return solution * (solution + 1) / 2 == n;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn divisors_include_one_and_n_works() {
+        let mut set = HashSet::new();
+        set.insert(1);
+        set.insert(5);
+        assert_eq!(super::divisors_include_one_and_n(5), set);
+        set = HashSet::new();
+        set.insert(1);
+        set.insert(2);
+        set.insert(4);
+        set.insert(8);
+        assert_eq!(super::divisors_include_one_and_n(8), set);
+    }
+
+    #[test]
+    fn divisors_include_one_works() {
+        let mut set = HashSet::new();
+        set.insert(1);
+        assert_eq!(super::divisors_include_one(5), set);
+        set = HashSet::new();
+        set.insert(1);
+        set.insert(2);
+        set.insert(4);
+        assert_eq!(super::divisors_include_one(8), set);
+    }
+
+    #[test]
+    fn permute_trivial_vec_works() {
+        let mut expected = vec![];
+        expected.push(vec![]);
+        assert_eq!(super::permute::<u64>(vec![]),expected);
+    }
+
+    #[test]
+    fn permute_simple_vec_works() {
+        let mut expected = vec![];
+        expected.push(vec![1]);
+        assert_eq!(super::permute::<u64>(vec![1]),expected);
+        expected.clear();
+        expected.push(vec![1,2,3]);
+        expected.push(vec![1,3,2]);
+        expected.push(vec![2,1,3]);
+        expected.push(vec![2,3,1]);
+        expected.push(vec![3,1,2]);
+        expected.push(vec![3,2,1]);
+        let actual = super::permute::<u64>(vec![1, 2, 3]);
+        assert_eq!(actual.len(), expected.len());
+        for i in 0..actual.len() {
+            assert!(expected.contains(&actual[i]));
+        }
+    }
+
+    #[test]
+    fn gcd_works() {
+        assert_eq!(9, super::gcd(&27, &18));
+        assert_eq!(800, super::gcd(&38729600,&800));
+        assert_eq!(1, super::gcd(&1,&100));
+        assert_eq!(1, super::gcd(&100,&1));
+    }
+
+    #[test]
+    fn prime_sieve_works() {
+        let mut primes:SortedVec<u64> = SortedVec::new();
+        primes.insert(2);
+        assert_eq!(primes, super::prime_sieve(2));
+        primes.insert(3);
+        assert_eq!(primes, super::prime_sieve(3));
+        primes.insert(5);
+        assert_eq!(primes, super::prime_sieve(6));
+        primes.insert(7);
+        primes.insert(11);
+        primes.insert(13);
+        primes.insert(17);
+        primes.insert(19);
+        primes.insert(23);
+        primes.insert(29);
+        primes.insert(31);
+        primes.insert(37);
+        primes.insert(41);
+        primes.insert(43);
+        primes.insert(47);
+        primes.insert(53);
+        primes.insert(59);
+        primes.insert(61);
+        primes.insert(67);
+        primes.insert(71);
+        primes.insert(73);
+        primes.insert(79);
+        primes.insert(83);
+        primes.insert(89);
+        assert_eq!(super::prime_sieve(92), primes);
+    }
 }
