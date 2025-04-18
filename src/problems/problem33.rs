@@ -14,7 +14,7 @@ pub fn solve() {
         }
     }
 
-    let factor = number_theory::gcd(numerator, denominator);
+    let factor = number_theory::gcd(&numerator, &denominator);
 
     println!("The product of the four fractions has a denominator of {}", denominator/factor);
 }

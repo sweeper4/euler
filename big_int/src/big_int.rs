@@ -40,21 +40,18 @@ impl PartialEq for BigInt {
     }
 }
 
-impl Add for BigInt {
-    type Output = Self;
+impl Add<&BigInt> for &BigInt {
+    type Output = BigInt;
 
-    fn add(self, other: BigInt) -> Self::Output {
-        return self.add(other);
+    fn add(self, other: & BigInt) -> BigInt {
+        return self.add_fn(other);
     }
 }
 
 impl AddAssign for BigInt {
     fn add_assign(&mut self, rhs: BigInt) {
-        let result = self.clone().add(rhs);
-        *self = BigInt {
-            signed: result.signed,
-            num_vec: result.num_vec
-        }
+        let result = self.add(&rhs);
+        *self = result.clone();
     }
 }
 
@@ -83,12 +80,12 @@ impl Div for BigInt {
 }
 
 impl Zero for BigInt {
-    fn zero() -> Self {
+    fn zero() -> BigInt {
         BigInt::from_string("0".to_owned())
     }
 
     fn is_zero(&self) -> bool {
-        self.is_zero()
+        self.is_zero_fn()
     }
 }
 
@@ -150,7 +147,7 @@ impl BigInt {
             0 => BigInt{signed: signed, num_vec: vec![0]},
             mut i => {
                 while i > 0 {
-                    vec.insert(0,(i % 1000).try_into().unwrap());
+                    vec.insert(0,(i % 1000) as u32);
                     i /= 1000;
                 }
                 BigInt{
@@ -198,46 +195,33 @@ impl BigInt {
         return show;
     }
 
-    pub fn add(self, other: BigInt) -> BigInt {
+    pub fn add_fn(&self, other: &BigInt) -> BigInt {
         if self.signed != other.signed {
             if self.signed {
-                return BigInt{
-                    signed: other.signed,
-                    num_vec: other.num_vec
-                }.sub(BigInt{
+                return other.sub_fn(BigInt{
                     signed: !self.signed,
-                    num_vec: self.num_vec
+                    num_vec: self.num_vec.clone()
                 });
             } else {
-                return BigInt{
-                    signed: self.signed,
-                    num_vec: self.num_vec
-                }.sub(BigInt{
+                return self.sub_fn(BigInt{
                     signed: !other.signed,
-                    num_vec: other.num_vec
+                    num_vec: other.num_vec.clone()
                 });
             }
         }
         
         return BigInt{
             signed: self.signed,
-            num_vec: BigInt::remove_leading_zeros(BigInt::add_array(self.num_vec, other.num_vec))
+            num_vec: BigInt::remove_leading_zeros(BigInt::add_array(self.num_vec.clone(), other.num_vec.clone()))
         }
     }
 
-    pub fn sub(self, other: BigInt) -> BigInt {
+    pub fn sub_fn(&self, other: BigInt) -> BigInt {
         if self.signed != other.signed {
+            let num_vec = BigInt::add_array(&self.num_vec, &other.num_vec);
             return BigInt{
                 signed: self.signed,
-                num_vec: BigInt{
-                    signed: false,
-                    num_vec: self.num_vec
-                }.add(
-                    BigInt{
-                        signed: false,
-                        num_vec: other.num_vec
-                    }
-                ).num_vec
+                num_vec
             };
         }
         if self.num_vec == other.num_vec {
@@ -256,7 +240,7 @@ impl BigInt {
 
         return BigInt{
             signed: signed,
-            num_vec: BigInt::remove_leading_zeros(BigInt::sub_array(self.num_vec, other.num_vec))
+            num_vec: BigInt::remove_leading_zeros(BigInt::sub_array(&self.num_vec, &other.num_vec))
         }
     }
 
@@ -264,7 +248,7 @@ impl BigInt {
         let signed = self.signed != other.signed;
         
         return BigInt{
-            signed: signed,
+            signed,
             num_vec: BigInt::remove_leading_zeros(BigInt::mul_array(self.num_vec, other.num_vec))
         };
     }
@@ -274,7 +258,12 @@ impl BigInt {
     }
 
     pub fn div(self, other: BigInt) -> BigInt {
-        return self;
+        let signed = self.signed != other.signed;
+
+        return BigInt{
+            signed,
+            num_vec: BigInt::remove_leading_zeros(BigInt::div_array(self.num_vec, other.num_vec))
+        };
     }
 
     /**
@@ -295,7 +284,7 @@ impl BigInt {
         }
     }
 
-    pub fn is_zero(&self) -> bool {
+    pub fn is_zero_fn(&self) -> bool {
         self.num_vec.len() == 1 && self.num_vec[0] == 0
     }
 
@@ -307,7 +296,7 @@ impl BigInt {
         return new_vec;
     }
 
-    fn add_array(num1:Vec<u32>, num2:Vec<u32>) -> Vec<u32> {
+    fn add_array(num1:&Vec<u32>, num2:&Vec<u32>) -> Vec<u32> {
         let mut carry = 0;
         let mut new_vec = vec![];
         let mut a = num1.iter().rev();
@@ -340,7 +329,7 @@ impl BigInt {
         return new_vec;
     }
 
-    fn sub_array(num1:Vec<u32>, num2:Vec<u32>) -> Vec<u32> {
+    fn sub_array(num1:&Vec<u32>, num2:&Vec<u32>) -> Vec<u32> {
         let mut a;
         let mut b;
         let mut carry = 0;
@@ -403,15 +392,68 @@ impl BigInt {
         }
         return new_vec;
     }
+
+    fn div_array(num1:Vec<u32>, num2:Vec<u32>) -> Vec<u32> {
+        if num1.len() < num2.len() {
+            return vec![0];
+        }
+        let mut num1_index = num1.len() - num2.len();
+        let mut working_vec = vec![];
+        for i in num1_index+1..num1.len() {
+            working_vec.insert(0, num1.get(i));
+        }
+        while num1_index > 0 {
+            working_vec.insert(0, num1.get(num1_index));
+            //binary search to find the int n such that num2 * n <= working_vec and num2 * (n+1) > working_vec
+            let mut min = 0;
+            let mut max = 1000;
+            loop {
+                let mid = (min + max) / 2;
+
+            }
+        }
+        return vec![];
+    }
 }
 
 #[cfg(test)]
 mod test {
+    use num_traits::One;
+
     use super::BigInt;
 
     #[test]
     fn big_int_pow_works() {
         assert_eq!(BigInt::new(5).pow(5), BigInt::from_string("3125".to_owned()));
         assert_eq!(BigInt::new(99).pow(99), BigInt::from_string("369729637649726772657187905628805440595668764281741102430259972423552570455277523421410650010128232727940978889548326540119429996769494359451621570193644014418071060667659301384999779999159200499899".to_owned()));
+    }
+
+    #[test]
+    fn add() {
+        let a = BigInt::one();
+        let b = &a + &a;
+        let c = b + &a;
+        let d = b + b;
+        assert_eq!(&a + b + c + d, &BigInt::new(10));
+    }
+
+    #[test]
+    fn compare() {
+        let a = BigInt::new(9);
+        let b = BigInt::new(1111);
+        let c = BigInt::new(-9);
+        let d = BigInt::new(-1111);
+        assert!(a < b);
+        assert!(a > c);
+        assert!(a > d);
+        assert!(b > a);
+        assert!(b > c);
+        assert!(b > d);
+        assert!(c < a);
+        assert!(c < b);
+        assert!(c > d);
+        assert!(d < a);
+        assert!(d < b);
+        assert!(d < c);
     }
 }

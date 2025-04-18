@@ -1,14 +1,14 @@
-use big_int::BigInt;
+use num::{BigInt, One};
 
 pub fn solve() {
-    let mut a = BigInt::new(1);
-    let mut b = BigInt::new(1);
+    let mut a = BigInt::one();
+    let mut b = BigInt::one();
     let mut b_index = 2;
 
-    while b.show().len() < 1000 {
+    while b.to_str_radix(10).len() < 1000 {
         let c = a.clone();
-        a = b.clone();
-        b = a.clone() + c.clone();
+        a = b;
+        b = a.clone() + c;
         b_index += 1;
     }
 

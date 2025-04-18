@@ -30,16 +30,16 @@ impl<N: Mul<Output = N> + Div<Output = N> + Zero + One + PartialOrd + Rem<Output
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
-        let numerator_1 = self.numerator * rhs.denominator;
-        let numerator_2 = rhs.numerator * self.denominator;
+        let numerator_1 = self.numerator * rhs.denominator.clone();
+        let numerator_2 = rhs.numerator * self.denominator.clone();
         let denominator = self.denominator * rhs.denominator;
         let common = gcd(&gcd(&numerator_1, &numerator_2), &denominator);
-        let numerator_1 = numerator_1 / common;
-        let numerator_2 = numerator_2 / common;
+        let numerator_1 = numerator_1 / common.clone();
+        let numerator_2 = numerator_2 / common.clone();
         let denominator = denominator / common;
         let numerator = numerator_1 + numerator_2;
         let common = gcd(&numerator, &denominator);
-        let numerator = numerator / common;
+        let numerator = numerator / common.clone();
         let denominator = denominator / common;
         return Fraction {numerator, denominator};
     }
@@ -52,7 +52,7 @@ impl<N: Mul<Output = N> + Div<Output = N> + Zero + One + PartialOrd + Rem<Output
         let numerator = self.numerator * rhs.numerator;
         let denominator = self.denominator * rhs.denominator;
         let common = gcd(&numerator, &denominator);
-        let numerator = numerator / common;
+        let numerator = numerator / common.clone();
         let denominator = denominator / common;
         return Fraction {numerator, denominator};
     }
