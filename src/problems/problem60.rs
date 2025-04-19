@@ -3,18 +3,21 @@ use primes::{PrimeSet, Sieve};
 pub fn solve() {
     let mut sieve = Sieve::new();
     let primes = sieve.iter();
-    let mut cliques = vec![];
+    let mut cliques = vec![vec![]];
     for prime in primes {
+        let mut new_cliques = vec![];
         for clique in cliques.iter_mut() {
             if fits_clique(prime, clique) {
-                clique.push(prime);
-                if clique.len() == 5 {
-                    println!("{:?},{}", clique, clique.iter().map(|a| *a).sum::<u64>());
+                let mut new_clique = clique.clone();
+                new_clique.push(prime);
+                if new_clique.len() == 5 {
+                    println!("{:?},{}", new_clique, new_clique.iter().map(|a| *a).sum::<u64>());
                     return;
                 }
+                new_cliques.push(new_clique);
             }
         }
-        cliques.push(vec![prime]);
+        cliques.append(&mut new_cliques);
     }
 
 }
