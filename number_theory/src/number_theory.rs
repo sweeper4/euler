@@ -4,6 +4,7 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
+use std::ops::Div;
 use std::ops::Rem;
 use num_traits::One;
 use num_traits::Zero;
@@ -275,6 +276,16 @@ pub fn is_triangular(n: u64) -> bool {
     // -1+-sqrt(1-4*1*-2n)/2
     let solution = (((1 + 8*n) as f64).sqrt() as u64 - 1)/2;
     return solution * (solution + 1) / 2 == n;
+}
+
+pub fn num_length<N: Div<Output = N> + PartialOrd + Zero + One + Copy>(n: N, radix: N) -> N {
+    let mut n = n;
+    let mut count = N::zero();
+    while n > N::zero() {
+        count = count + N::one();
+        n = n / radix;
+    }
+    return count;
 }
 
 #[cfg(test)]
