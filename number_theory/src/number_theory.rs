@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
+use num::integer::Roots;
 
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -288,6 +289,29 @@ pub fn num_length<N: Div<Output = N> + PartialOrd + Zero + One + Copy>(n: N, rad
     return count;
 }
 
+pub fn continued_fraction_of_sqrt(num: u64) -> (u64, Vec<u64>) {
+    let int_part = num.sqrt();
+    let mut numerator = 1;
+    let mut denominator_modifier = int_part;
+    let mut repeating_part = vec![];
+    let non_repeating_part = int_part;
+    let mut points_encountered = vec![];
+    loop {
+        let numerator_modifier = denominator_modifier;
+        let denominator = (num - numerator_modifier * numerator_modifier) / numerator;
+        let new_int_part = (((num as f64).sqrt() + numerator_modifier as f64) / denominator as f64).floor() as u64;
+        denominator_modifier = denominator * new_int_part - numerator_modifier;
+        numerator = denominator;
+        let new_point = (new_int_part, denominator_modifier, numerator);
+        if points_encountered.contains(&new_point) {
+            break;
+        }
+        points_encountered.push(new_point);
+        repeating_part.push(new_int_part);
+    }
+    return (non_repeating_part, repeating_part);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -383,5 +407,18 @@ mod tests {
         primes.insert(83);
         primes.insert(89);
         assert_eq!(super::prime_sieve(92), primes);
+    }
+
+    #[test]
+    fn tescontinued_fraction_of_sqrtt() {
+        let (a,b) = continued_fraction_of_sqrt(2);
+        assert_eq!(a,1);
+        assert_eq!(b, vec![2]);
+        let (a,b) = continued_fraction_of_sqrt(3);
+        assert_eq!(a,1);
+        assert_eq!(b, vec![1,2]);
+        let (a,b) = continued_fraction_of_sqrt(5);
+        assert_eq!(a,2);
+        assert_eq!(b, vec![4]);
     }
 }
