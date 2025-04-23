@@ -4,6 +4,7 @@ use num_traits::{Zero, One};
 
 use crate::number_theory::gcd;
 
+#[derive(PartialEq, Eq, Debug)]
 pub struct Fraction<N: Mul<Output = N> + Div<Output = N> + Zero + One + PartialOrd + Rem<Output = N> + Clone> {
     pub numerator: N,
     pub denominator: N
