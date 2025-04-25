@@ -25,9 +25,9 @@ fn calculate_partial_sum(int_part: BigInt, repeating_part: Vec<u32>, term_count:
         if i == 0 {
             break;
         }
+        i -= 1;
         fraction = fraction + Fraction::new(BigInt::new(Sign::Plus, vec![repeating_part[i % repeating_part.len()]]), BigInt::new(Sign::Plus, vec![1])).unwrap();
         fraction = fraction.inverse();
-        i -= 1;
     }
     fraction = fraction + Fraction::new(int_part, BigInt::new(Sign::Plus, vec![1])).unwrap();
     return fraction;
