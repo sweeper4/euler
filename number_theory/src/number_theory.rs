@@ -1,6 +1,9 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
+use num::bigint::Sign;
 use num::integer::Roots;
+use num::BigInt;
+use num::FromPrimitive;
 
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -12,6 +15,8 @@ use num_traits::Zero;
 use primes::PrimeSet;
 use sorted_vec::SortedVec;
 use num_traits::int::PrimInt;
+
+use crate::fraction::Fraction;
 
 pub fn divisors_include_one_and_n(n:u64) -> HashSet<u64> {
     let mut factors = vec!();
@@ -312,6 +317,21 @@ pub fn continued_fraction_of_sqrt(num: u64) -> (u64, Vec<u64>) {
     return (non_repeating_part, repeating_part);
 }
 
+pub fn calculate_partial_sum(int_part: BigInt, repeating_part: Vec<u64>, term_count: usize) -> Fraction<BigInt> {
+    let mut fraction = Fraction::new(BigInt::new(Sign::Plus, vec![0]),BigInt::from_u64(1).unwrap()).unwrap();
+    let mut i = term_count - 1;
+    loop {
+        if i == 0 {
+            break;
+        }
+        i -= 1;
+        fraction = fraction + Fraction::new(BigInt::new(Sign::Plus, vec![repeating_part[i % repeating_part.len()] as u32]), BigInt::new(Sign::Plus, vec![1])).unwrap();
+        fraction = fraction.inverse();
+    }
+    fraction = fraction + Fraction::new(int_part, BigInt::new(Sign::Plus, vec![1])).unwrap();
+    return fraction;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -420,5 +440,15 @@ mod tests {
         let (a,b) = continued_fraction_of_sqrt(5);
         assert_eq!(a,2);
         assert_eq!(b, vec![4]);
+    }
+
+    #[test]
+    fn calculate_partial_sum_works() {
+        let a = calculate_partial_sum(BigInt::new(Sign::Plus, vec![1]), vec![2], 1);
+        assert_eq!(a, Fraction::new(BigInt::new(Sign::Plus, vec![1]), BigInt::new(Sign::Plus, vec![1])).unwrap());
+        let a = calculate_partial_sum(BigInt::new(Sign::Plus, vec![1]), vec![2], 2);
+        assert_eq!(a, Fraction::new(BigInt::new(Sign::Plus, vec![3]), BigInt::new(Sign::Plus, vec![2])).unwrap());
+        let a = calculate_partial_sum(BigInt::new(Sign::Plus, vec![1]), vec![2], 3);
+        assert_eq!(a, Fraction::new(BigInt::new(Sign::Plus, vec![7]), BigInt::new(Sign::Plus, vec![5])).unwrap());
     }
 }
