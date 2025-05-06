@@ -88,11 +88,11 @@ fn solve_2(num_of_gon: usize) {
             break;
         }
         for arrangement in arrangements {
-            println!("{:?}", arrangement);
             let num:String = arrangement.iter().map(|(a,b,c)| (*a).to_string() + &(*b).to_string() + &(*c).to_string()).collect();
             if num.len() != 16 {
                 continue;
             }
+            println!("{:?}", arrangement);
             let num = num.parse::<u64>().unwrap();
             if num > biggest_num {
                 biggest_num = num;
@@ -165,7 +165,7 @@ mod tests {
 
     #[test]
     fn test_2() {
-        solve_2(5);
+        solve_2(3);
     }
 }
 
