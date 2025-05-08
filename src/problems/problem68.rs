@@ -1,162 +1,158 @@
-use std::collections::HashSet;
-
 pub fn solve() {
-    let mut best_sum = 0;
-    for total in 10..20 {
-        for o1 in 1_u32..11 {
-            for i1 in 1..11 {
-                if [o1].contains(&i1) {
-                    continue;
-                }
-                if total < o1 + i1 {
-                    continue;
-                }
-                let i2 = total - o1 - i1;
-                if [i1,o1].contains(&i2) || i2 > 10 || i2 == 0 {
-                    continue;
-                }
-                for o2 in 1..11 {
-                    if [i1,i2].contains(&o2) {
-                        continue;
-                    }
-                    if total < o2 + i2 {
-                        continue;
-                    }
-                    let i3 = total - o2 - i2;
-                    if [i1,i2,o1,o2].contains(&i3) || i3 > 10 || i3 == 0 {
-                        continue;
-                    }
-                    for o3 in 1..11 {
-                        if [i1,i2,i3,o1,o2].contains(&o3) {
-                            continue;
-                        }
-                        if total < o3 + i3 {
-                            continue;
-                        }
-                        let i4 = total - o3 - i3;
-                        if [i1,i2,i3,o1,o2,o3].contains(&i4) || i4 > 10 || i4 == 0 {
-                            continue;
-                        }
-                        for o4 in 1..11 {
-                            if [i1,i2,i3,i4,o1,o2,o3].contains(&o4) {
-                                continue;
-                            }
-                            if total < i4 + o4 {
-                                continue;
-                            }
-                            let i5 = total - i4 - o4;
-                            if [i1,i2,i3,i4,o1,o2,o3,o4].contains(&i5) || i5 > 10 || i5 == 0 {
-                                continue;
-                            }
-                            if total < i1 + i5 {
-                                continue;
-                            }
-                            let o5 = total - i1 - i5;
-                            if [i1,i2,i3,i4,i5,o1,o2,o3,o4].contains(&o5) || o5 > 10 || o5 == 0 || o5 <= o4 {
-                                continue;
-                            }
-                            let a:String = [o1,i1,i2,o2,i2,i3,o3,i3,i4,o4,i4,i5,o5,i5,i1].iter().map(|x| x.to_string()).collect();
-                            if a.len() != 16 {
-                                continue;
-                            }
-                            println!("{:?},{:?},{:?},{:?},{:?}",[o1,i1,i2],[o2,i2,i3],[o3,i3,i4],[o4,i4,i5],[o5,i5,i1]);
-                            println!("{}",a);
-                            let a = a.parse::<u128>().unwrap();
-                            if a > best_sum {
-                                best_sum = a;
-                            }
-                        }
-                    }
-                }
+    let nums = solve_3(5);
+    let mut highest = 0;
+    for num in nums {
+        if num >= 1_000_000_000_000_000 && num < 10_000_000_000_000_000 {
+            if num > highest {
+                highest = num;
             }
         }
     }
-    println!("{}", best_sum)
+    println!("{}",highest);
 }
 
-fn solve_2(num_of_gon: usize) {
-    let mut innies = vec![];
-    let mut outies = vec![];
-    for _ in 0..num_of_gon {
-        innies.push(0);
-        outies.push(0);
-    }
-    let mut biggest_num = 0;
-    for triple_sum in (3*num_of_gon)..(5*num_of_gon) {
-        let arrangements = solve_2_rec(&mut innies, &mut outies, 0, num_of_gon, triple_sum);
-        if biggest_num > 0 && arrangements.len() == 0 {
-            break;
+fn solve_3(num_of_gon: usize) -> Vec<u64> {
+    let mut numbers = vec![];
+    for total in 2*num_of_gon as u32 .. 4*num_of_gon as u32 {
+        let mut vals: Vec<Option<u32>> = vec![];
+        for _ in 0..num_of_gon {
+            vals.push(None);
+            vals.push(None);
         }
-        for arrangement in arrangements {
-            let num:String = arrangement.iter().map(|(a,b,c)| (*a).to_string() + &(*b).to_string() + &(*c).to_string()).collect();
-            if num.len() != 16 {
-                continue;
-            }
-            println!("{:?}", arrangement);
-            let num = num.parse::<u64>().unwrap();
-            if num > biggest_num {
-                biggest_num = num;
-            }
-        }
-    }
-    println!("{}",biggest_num);
-}
-
-fn solve_2_rec(innies: &mut Vec<usize>, outies: &mut Vec<usize>, index: usize, num_of_gon: usize, target: usize) -> HashSet<Vec<(usize,usize,usize)>> {
-    let mut solutions = HashSet::new();
-    for i in 1..(2*num_of_gon + 1) {
-        innies[index] = 0;
-        outies[index] = 0;
-        if innies.contains(&i) || outies.contains(&i) {
-            continue;
-        }
-        innies[index] = i;
-        if index > 0 {
-            if target <= innies[index] + innies[index - 1] {
-                continue;
-            }
-            let outie = target - innies[index] - innies[index - 1];
-            if outies.contains(&outie) || innies.contains(&outie) || outie > 2 * num_of_gon {
-                continue;
-            }
-            outies[index] = outie;
-        }
-        if index + 1 == num_of_gon {
-            if target <= innies[0] + innies[num_of_gon - 1] {
-                continue;
-            }
-            let outie = target - innies[0] - innies[num_of_gon - 1];
-            if outies.contains(&outie) || innies.contains(&outie) || outie > 2 * num_of_gon {
-                continue;
-            }
-            outies[0] = outie;
-            let mut solution = vec![];
-            for i in 0..num_of_gon {
-                solution.push((outies[i], innies[(i+num_of_gon-1) % num_of_gon], innies[i]));
-            }
-            let mut lowest_index = 0;
-            let mut lowest = 2*num_of_gon;
-            for (i,(a,_,_)) in solution.iter().enumerate() {
-                if *a < lowest {
-                    lowest = *a;
-                    lowest_index = i;
+        let mut considered_vals: Vec<Vec<Option<u32>>> = vec![vals];
+        for i in 0..num_of_gon {
+            let mut new_considered_vals = vec![];
+            while let Some(vals) = considered_vals.pop() {
+                for j in 0..num_of_gon * 2 {
+                    let mut new_vals = vals.clone();
+                    new_vals[i] = Some(j as u32 + 1);
+                    if validate(&new_vals) && extrapolate(num_of_gon, total, &mut new_vals, i) {
+                        new_considered_vals.push(new_vals);
+                    }
                 }
             }
-            solution.rotate_left(lowest_index);
-            solutions.insert(solution);
-        } else {
-            let sols = solve_2_rec(innies, outies, index + 1, num_of_gon, target);
-            solutions = &solutions | &sols;
+            considered_vals = new_considered_vals;
+        }
+        let mut new_considered_vals = vec![];
+        while let Some(vals) = considered_vals.pop() {
+            let mut vals = vals;
+            if validate(&vals) && extrapolate(num_of_gon, total, &mut vals, 0) {
+                new_considered_vals.push(vals);
+            }
+        }
+        considered_vals = new_considered_vals;
+        for vals in considered_vals {
+            let number = get_string(&vals, num_of_gon);
+            if !numbers.contains(&number) {
+                numbers.push(number);
+            }
         }
     }
-    innies[index] = 0;
-    outies[index] = 0;
-    return solutions;
+    return numbers;
+}
+
+fn get_string(vals: &Vec<Option<u32>>, num_of_gon: usize) -> u64 {
+    let mut triples = vec![];
+    for i in 0..num_of_gon {
+        match (vals[get_inner_index(i, num_of_gon)], vals[get_inner_index(i+num_of_gon-1, num_of_gon)], vals[get_outer_index(i+num_of_gon-1, num_of_gon)]) {
+            (Some(a),Some(b),Some(c)) => {
+                triples.push((c,b,a));
+            }
+            _ => {}
+        }
+    }
+    let mut smallest = num_of_gon as u32 * 2;
+    let mut smallest_index = 0;
+    for (i,(a,_,_)) in triples.iter().enumerate() {
+        if *a < smallest {
+            smallest = *a;
+            smallest_index = i;
+        }
+    }
+    triples.rotate_left(smallest_index);
+    let triple:String = triples.iter().map(|(a,b,c)| a.to_string() + &b.to_string() + &c.to_string()).collect();
+    return triple.parse().unwrap();
+}
+
+fn extrapolate(num_of_gon: usize, total: u32, vals: &mut Vec<Option<u32>>, n: usize) -> bool {
+    match (vals[get_inner_index(n, num_of_gon)], vals[get_inner_index(n+num_of_gon-1, num_of_gon)], vals[get_outer_index(n+num_of_gon-1, num_of_gon)]) {
+        (Some(a),Some(b),None) => {
+            if a + b >= total {
+                return false;
+            }
+            let c = total - a - b;
+            if c > num_of_gon as u32 * 2 {
+                return false;
+            }
+            for d in vals.iter() {
+                if d.is_some() && d.unwrap() == c {
+                    return false;
+                }
+            }
+            vals[get_outer_index(n+num_of_gon-1, num_of_gon)] = Some(c);
+        },
+        (Some(a),None,Some(c)) => {
+            if a + c >= total {
+                return false;
+            }
+            let b = total - a - c;
+            if b > num_of_gon as u32 * 2 {
+                return false;
+            }
+            for d in vals.iter() {
+                if d.is_some() && d.unwrap() == b {
+                    return false;
+                }
+            }
+            vals[get_inner_index(n+num_of_gon-1, num_of_gon)] = Some(b);
+        },
+        (None,Some(b),Some(c)) => {
+            if b + c >= total {
+                return false;
+            }
+            let a = total - b - c;
+            if a > num_of_gon as u32 * 2 {
+                return false;
+            }
+            for d in vals.iter() {
+                if d.is_some() && d.unwrap() == a {
+                    return false;
+                }
+            }
+            vals[get_inner_index(n, num_of_gon)] = Some(a);
+        },
+        _ => {}
+    }
+    return true;
+}
+
+fn validate(vals: &Vec<Option<u32>>) -> bool {
+    let mut seen = vec![];
+    for a in vals {
+        match *a {
+            Some(a) => {
+                if seen.contains(&a) {
+                    return false;
+                }
+                seen.push(a);
+            }
+            _ => {}
+        }
+    }
+    return true;
+}
+
+fn get_inner_index(n: usize, num_of_gon: usize) -> usize {
+    return (n + num_of_gon) % num_of_gon;
+}
+
+fn get_outer_index(n: usize, num_of_gon: usize) -> usize {
+    return (n + num_of_gon) % num_of_gon + num_of_gon;
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{solve, solve_2};
+    use super::{extrapolate, solve, solve_3};
 
     #[test]
     fn test() {
@@ -164,10 +160,23 @@ mod tests {
     }
 
     #[test]
-    fn test_2() {
-        solve_2(3);
+    fn test_extrapolate() {
+        let mut vals = vec![Some(1),None,None,Some(3),None,None];
+        let ex = extrapolate(3, 6, &mut vals, 0);
+        assert!(ex);
+        assert_eq!(vals,vec![Some(1),Some(2),None,Some(3),None,None]);
+        vals[1] = None;
+        let ex = extrapolate(3, 5, &mut vals, 0);
+        assert!(!ex);
+        assert_eq!(vals,vec![Some(1),None,None,Some(3),None,None]);
+        let ex = extrapolate(3, 3, &mut vals, 0);
+        assert!(!ex);
+        assert_eq!(vals,vec![Some(1),None,None,Some(3),None,None]);
+    }
+
+    #[test]
+    fn test_3() {
+        solve_3(3);
+        solve_3(5);
     }
 }
-
-//7638359521024646
-//2951051817673439
