@@ -136,6 +136,42 @@ pub fn prime_factors_of(mut n:u64) -> HashMap<u64,u64> {
     return prime_factors;
 }
 
+pub fn prime_factors_of_efficient(mut n:u64, primes: &mut primes::Sieve) -> HashMap<u64,u64> {
+    let mut prime_factors = HashMap::new();
+    for prime in primes.iter() {
+        let mut count = 0;
+        while n > 1 && n % prime == 0 {
+            count += 1;
+            n /= prime;
+        }
+        if count > 0 {
+            prime_factors.insert(prime, count);
+        }
+        if n == 1 {
+            break;
+        }
+    }
+    return prime_factors;
+}
+
+pub fn totient(n: u64, primes: &mut primes::Sieve) -> u64 {
+    let mut count = 1;
+    let factors = prime_factors_of_efficient(n, primes);
+    for (a,b) in factors {
+        count *= a.pow(b as u32) - a.pow(b as u32 - 1);
+    }
+    return count;
+}
+
+pub fn number_of_divisors(n: u64) -> u64 {
+    let factors = prime_factors_of(n);
+    let mut divisor_count = 1;
+    for (factor, count) in factors {
+        divisor_count *= count+1;
+    }
+    return divisor_count;
+}
+
 pub fn permute<T: Clone + Copy + Eq + std::hash::Hash>(list:Vec<T>) -> Vec<Vec<T>> {
     let mut final_result = Vec::new();
     if list.is_empty() {
