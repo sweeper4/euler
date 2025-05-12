@@ -136,13 +136,36 @@ pub fn prime_factors_of(mut n:u64) -> HashMap<u64,u64> {
     return prime_factors;
 }
 
-pub fn prime_factors_of_efficient(mut n:u64, primes: &mut primes::Sieve) -> HashMap<u64,u64> {
+pub fn prime_factors_of_efficient(original_n:u64, primes: &mut primes::Sieve, memo: &mut HashMap<u64, HashMap<u64,u64>>) -> HashMap<u64,u64> {
+    let mut n = original_n;
+    if memo.contains_key(&n) {
+        return memo.get(&n).unwrap().clone();
+    }
     let mut prime_factors = HashMap::new();
     for prime in primes.iter() {
         let mut count = 0;
         while n > 1 && n % prime == 0 {
             count += 1;
             n /= prime;
+            if memo.contains_key(&n) {
+                prime_factors.insert(prime, count);
+                let memoized_factors = memo.get(&n).unwrap().clone();
+                let mut final_factors = HashMap::new();
+                for (key,value) in prime_factors.iter() {
+                    if !final_factors.contains_key(key) {
+                        final_factors.insert(*key, 0);
+                    }
+                    final_factors.insert(*key, final_factors.get(key).unwrap() + *value);
+                }
+                for (key,value) in memoized_factors.iter() {
+                    if !final_factors.contains_key(key) {
+                        final_factors.insert(*key, 0);
+                    }
+                    final_factors.insert(*key, final_factors.get(key).unwrap() + *value);
+                }
+                memo.insert(original_n, final_factors.clone());
+                return final_factors;
+            }
         }
         if count > 0 {
             prime_factors.insert(prime, count);
@@ -151,12 +174,13 @@ pub fn prime_factors_of_efficient(mut n:u64, primes: &mut primes::Sieve) -> Hash
             break;
         }
     }
+    memo.insert(original_n, prime_factors.clone());
     return prime_factors;
 }
 
-pub fn totient(n: u64, primes: &mut primes::Sieve) -> u64 {
+pub fn totient(n: u64, primes: &mut primes::Sieve, prime_factors_memo: &mut HashMap<u64, HashMap<u64, u64>>) -> u64 {
     let mut count = 1;
-    let factors = prime_factors_of_efficient(n, primes);
+    let factors = prime_factors_of_efficient(n, primes, prime_factors_memo);
     for (a,b) in factors {
         count *= a.pow(b as u32) - a.pow(b as u32 - 1);
     }
@@ -320,6 +344,29 @@ pub fn is_triangular(n: u64) -> bool {
     return solution * (solution + 1) / 2 == n;
 }
 
+pub fn is_permute(a: &u64, b: &u64, radix: usize) -> bool {
+    let mut a = *a;
+    let mut b = *b;
+    let mut digit_counts = vec![];
+    for i in 0..radix {
+        digit_counts.push(0);
+    }
+    while a > 0 {
+        digit_counts[a as usize % radix] += 1;
+        a /= radix as u64;
+    }
+    while b > 0 {
+        digit_counts[b as usize % radix] -= 1;
+        b /= radix as u64;
+    }
+    for i in 0..digit_counts.len() {
+        if digit_counts[i] != 0 {
+            return false;
+        }
+    }
+    return true;
+}
+
 pub fn num_length<N: Div<Output = N> + PartialOrd + Zero + One + Copy>(n: N, radix: N) -> N {
     let mut n = n;
     let mut count = N::zero();
@@ -466,7 +513,7 @@ mod tests {
     }
 
     #[test]
-    fn tescontinued_fraction_of_sqrtt() {
+    fn continued_fraction_of_sqrtt() {
         let (a,b) = continued_fraction_of_sqrt(2);
         assert_eq!(a,1);
         assert_eq!(b, vec![2]);
@@ -486,5 +533,17 @@ mod tests {
         assert_eq!(a, Fraction::new(BigInt::new(Sign::Plus, vec![3]), BigInt::new(Sign::Plus, vec![2])).unwrap());
         let a = calculate_partial_sum(BigInt::new(Sign::Plus, vec![1]), vec![2], 3);
         assert_eq!(a, Fraction::new(BigInt::new(Sign::Plus, vec![7]), BigInt::new(Sign::Plus, vec![5])).unwrap());
+    }
+
+    #[test]
+    fn prime_factors_of_efficient_works() {
+        let mut primes = primes::Sieve::new();
+        let mut memo = HashMap::new();
+        let factors = prime_factors_of_efficient(5, &mut primes, &mut memo);
+        assert_eq!(factors.keys().len(), 1);
+        assert_eq!(*factors.get(&5).unwrap(), 1);
+        let factors = prime_factors_of_efficient(25, &mut primes, &mut memo);
+        assert_eq!(factors.keys().len(), 1);
+        assert_eq!(*factors.get(&5).unwrap(), 2);
     }
 }
