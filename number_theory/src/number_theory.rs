@@ -8,7 +8,10 @@ use num::FromPrimitive;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::convert::TryInto;
+use std::hash::Hash;
+use std::ops::Add;
 use std::ops::Div;
+use std::ops::Mul;
 use std::ops::Rem;
 use num_traits::One;
 use num_traits::Zero;
@@ -336,10 +339,6 @@ pub fn is_prime(n:u64) -> bool {
 }
 
 pub fn is_triangular(n: u64) -> bool {
-    // x(x+1)/2=n
-    // x^2+x=2n
-    // x^2+x-2n=0
-    // -1+-sqrt(1-4*1*-2n)/2
     let solution = (((1 + 8*n) as f64).sqrt() as u64 - 1)/2;
     return solution * (solution + 1) / 2 == n;
 }
@@ -413,6 +412,42 @@ pub fn calculate_partial_sum(int_part: BigInt, repeating_part: Vec<u64>, term_co
     }
     fraction = fraction + Fraction::new(int_part, BigInt::new(Sign::Plus, vec![1])).unwrap();
     return fraction;
+}
+
+pub fn power_set<N: Clone + Eq + Hash>(initial: HashSet<N>) -> Vec<Vec<N>> {
+    let mut set_of_sets = vec![vec![]];
+    for val in initial {
+        let mut new_set_of_sets = vec![];
+        for set in set_of_sets {
+            let mut new_set = set.clone();
+            new_set.push(val.clone());
+            new_set_of_sets.push(new_set);
+            new_set_of_sets.push(set);
+        }
+        set_of_sets = new_set_of_sets;
+    }
+    return set_of_sets;
+}
+
+pub fn exponentiation_under_mod<N: Hash + Copy + Ord + Eq + Zero + One + Mul + Add + Div<Output = N> + Rem<Output = N>>(mut base: N, mut power: N, modulus: N, memo: &mut HashMap<(N,N,N),N>) -> N {
+    if memo.contains_key(&(base,power,modulus)) {
+        return *memo.get(&(base,power,modulus)).unwrap();
+    }
+    let mut answer = N::one();
+    let two = N::one() + N::one();
+    base = base % modulus;
+    if base == N::zero() {
+        return N::zero();
+    }
+    while power > N::zero() {
+        if power % two == N::one() {
+            answer = answer * base % modulus;
+        }
+        power = power / two;
+        answer = answer * answer % modulus;
+    }
+    memo.insert((base,power,modulus), answer);
+    return answer;
 }
 
 #[cfg(test)]
@@ -545,5 +580,23 @@ mod tests {
         let factors = prime_factors_of_efficient(25, &mut primes, &mut memo);
         assert_eq!(factors.keys().len(), 1);
         assert_eq!(*factors.get(&5).unwrap(), 2);
+    }
+
+    #[test]
+    fn power_set_workd() {
+        let mut a = vec![];
+        a.push(1);
+        a.push(2);
+        a.push(3);
+        let power = power_set(a);
+        assert_eq!(power.len(), 8);
+        assert!(power.contains(&HashSet::new()));
+        assert!(power.contains(&vec![1]));
+        assert!(power.contains(&vec![2]));
+        assert!(power.contains(&vec![3]));
+        assert!(power.contains(&vec![1,2]));
+        assert!(power.contains(&vec![1,3]));
+        assert!(power.contains(&vec![3,2]));
+        assert!(power.contains(&vec![1,2,3]));
     }
 }
