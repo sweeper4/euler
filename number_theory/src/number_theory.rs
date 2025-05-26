@@ -13,6 +13,7 @@ use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Rem;
+use std::ops::Sub;
 use num_traits::One;
 use num_traits::Zero;
 use primes::PrimeSet;
@@ -429,25 +430,27 @@ pub fn power_set<N: Clone + Eq + Hash>(initial: HashSet<N>) -> Vec<Vec<N>> {
     return set_of_sets;
 }
 
-pub fn exponentiation_under_mod<N: Hash + Copy + Ord + Eq + Zero + One + Mul + Add + Div<Output = N> + Rem<Output = N>>(mut base: N, mut power: N, modulus: N, memo: &mut HashMap<(N,N,N),N>) -> N {
-    if memo.contains_key(&(base,power,modulus)) {
-        return *memo.get(&(base,power,modulus)).unwrap();
+pub fn exponentiation_under_mod<N: PrimInt + Hash>(mut base: N, mut exp: N, modulus: N, memo: &mut HashMap<(N,N,N),N>) -> N {
+    if memo.contains_key(&(base,exp,modulus)) {
+        return *memo.get(&(base,exp,modulus)).unwrap();
     }
-    let mut answer = N::one();
-    let two = N::one() + N::one();
-    base = base % modulus;
-    if base == N::zero() {
-        return N::zero();
-    }
-    while power > N::zero() {
-        if power % two == N::one() {
-            answer = answer * base % modulus;
+    let orig_base = base;
+    let orig_exp = exp;
+    let one = N::one();
+    let two = one + one;
+    let mut result = one;
+    loop {
+        if exp % two == one {
+            result = (result * base) % modulus;
         }
-        power = power / two;
-        answer = answer * answer % modulus;
+        exp = exp / two;
+        if exp == N::zero() {
+            break;
+        }
+        base = (base * base) % modulus;
     }
-    memo.insert((base,power,modulus), answer);
-    return answer;
+    memo.insert((orig_base,orig_exp,modulus), result);
+    return result;
 }
 
 #[cfg(test)]
