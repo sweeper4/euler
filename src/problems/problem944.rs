@@ -1,6 +1,10 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap};
+#[cfg(test)]
+use std::collections::{HashSet};
 
-use number_theory::number_theory::{exponentiation_under_mod, power_set};
+use number_theory::number_theory::{exponentiation_under_mod};
+#[cfg(test)]
+use number_theory::number_theory::{power_set};
 
 pub fn solve() {
     let mut exponentiation_memo = HashMap::new();
@@ -28,6 +32,7 @@ pub fn solve() {
     println!("{}",total);
 }
 
+#[cfg(test)]
 fn brute_force_experiment(n: u64) -> u64 {
     let mut set = HashSet::new();
     let mut num_results = vec![];
@@ -59,6 +64,7 @@ fn brute_force_experiment(n: u64) -> u64 {
     return total;
 }
 
+#[cfg(test)]
 fn clever_thing(n: u64) -> u64 {
     let mut exponentiation_memo = HashMap::new();
     let limit = 1234567891;
@@ -73,6 +79,7 @@ fn clever_thing(n: u64) -> u64 {
     return total;
 }
 
+#[cfg(test)]
 fn cleverer_thing(n: u64) -> u64 {
     let mut exponentiation_memo = HashMap::new();
     let limit = 1234567891;
@@ -105,9 +112,7 @@ fn sum_all_ints_between(start: u64, end: u64) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::problems::problem944::cleverer_thing;
-
-    use super::{brute_force_experiment, clever_thing, solve};
+    use super::{brute_force_experiment, clever_thing, cleverer_thing};
 
     #[test]
     fn test() {
