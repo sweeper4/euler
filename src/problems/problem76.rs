@@ -2,43 +2,56 @@ use std::collections::HashMap;
 
 pub fn solve() {
     let mut memo = HashMap::new();
-    let count = count_of_sums(100, &mut memo, 100);
+    let count = count_of_all_sums(100, 100, &mut memo) - 1;
     println!("{}", count);
 }
 
-fn count_of_sums(total: u64, memo: &mut HashMap<u64, u64>, limit: u64) -> u64 {
-    if memo.contains_key(&total) {
-        return *memo.get(&total).unwrap();
+fn all_sums(total: u64, limit: u64, memo: &mut HashMap<(u64, u64), Vec<Vec<u64>>>) -> Vec<Vec<u64>> {
+    if memo.contains_key(&(total, limit)) {
+        return memo.get(&(total, limit)).unwrap().clone();
     }
-    let mut count = 0;
+    if total == 0 {
+        return vec![vec![]];
+    }
+    let mut results = vec![];
     for i in 1..limit+1 {
         if i > total {
             break;
         }
-        count += count_of_sums(total - i, memo, i) + 1;
+        let sub_results = all_sums(total - i, i, memo);
+        for mut result in sub_results {
+            result.insert(0, i);
+            results.push(result);
+        }
     }
-    memo.insert(total, count);
-    return count;
+    memo.insert((total, limit), results.clone());
+    return results;
 }
 
-fn count_of_sums_2(total: u64, limit: u64) -> Vec<u64> {
-    let mut count = 0;
+fn count_of_all_sums(total: u64, limit: u64, memo: &mut HashMap<(u64, u64), usize>) -> usize {
+    if memo.contains_key(&(total, limit)) {
+        return *memo.get(&(total, limit)).unwrap();
+    }
+    if total == 0 {
+        return 1;
+    }
+    let mut results = 0;
     for i in 1..limit+1 {
         if i > total {
             break;
         }
-        count += count_of_sums_2(total - i, i) + 1;
+        let sub_result = count_of_all_sums(total - i, i, memo);
+        results += sub_result;
     }
-    return count;
+    memo.insert((total, limit), results);
+    return results;
 }
 
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
 
-    use crate::problems::problem76::count_of_sums_2;
-
-    use super::{count_of_sums, solve};
+    use super::{all_sums, count_of_all_sums, solve};
 
     #[test]
     fn test() {
@@ -46,13 +59,30 @@ mod tests {
     }
 
     #[test]
+    fn test_all_sums() {
+        let mut memo = HashMap::new();
+        for i in 1..10 {
+            println!("{:?}", all_sums(i, i, &mut memo));
+        }
+        assert_eq!(1, all_sums(1, 1, &mut memo).len());
+        assert_eq!(2, all_sums(2, 2, &mut memo).len());
+        assert_eq!(3, all_sums(3, 3, &mut memo).len());
+        assert_eq!(5, all_sums(4, 4, &mut memo).len());
+        assert_eq!(7, all_sums(5, 5, &mut memo).len());
+        assert_eq!(11, all_sums(6, 6, &mut memo).len());
+    }
+
+    #[test]
     fn test_count_of_sums() {
         let mut memo = HashMap::new();
-        assert_eq!(0, count_of_sums_2(1, 1));
-        assert_eq!(1, count_of_sums_2(2, 2));
-        assert_eq!(2, count_of_sums_2(3, 3));
-        assert_eq!(4, count_of_sums_2(4, 4));
-        assert_eq!(6, count_of_sums_2(5, 5));
-        assert_eq!(6, count_of_sums_2(6, 6));
+        for i in 1..10 {
+            println!("{:?}", count_of_all_sums(i, i, &mut memo));
+        }
+        assert_eq!(1, count_of_all_sums(1, 1, &mut memo));
+        assert_eq!(2, count_of_all_sums(2, 2, &mut memo));
+        assert_eq!(3, count_of_all_sums(3, 3, &mut memo));
+        assert_eq!(5, count_of_all_sums(4, 4, &mut memo));
+        assert_eq!(7, count_of_all_sums(5, 5, &mut memo));
+        assert_eq!(11, count_of_all_sums(6, 6, &mut memo));
     }
 }
