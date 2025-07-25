@@ -76,6 +76,8 @@ mod problems {
     pub mod problem75;
     pub mod problem76;
     pub mod problem77;
+    pub mod problem78;
+    pub mod problem79;
     pub mod problem701;
     pub mod problem944;
 }
@@ -173,6 +175,8 @@ fn main() {
         (75, Box::new(problems::problem75::solve as fn() -> ())),
         (76, Box::new(problems::problem76::solve as fn() -> ())),
         (77, Box::new(problems::problem77::solve as fn() -> ())),
+        (78, Box::new(problems::problem78::solve as fn() -> ())),
+        (79, Box::new(problems::problem79::solve as fn() -> ())),
         (701, Box::new(problems::problem701::solve as fn() -> ())),
         (944, Box::new(problems::problem944::solve as fn() -> ()))
     ].iter().cloned().collect();
